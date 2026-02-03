@@ -27,57 +27,85 @@ The application is implemented as a Single Page Application (SPA) using Vite for
 - HTML5
 - Git & GitHub – Version control and collaboration
 
-## Updated Project Structure
+## Project Structure
 
-```text
-smartmove-frontend/
+src/
 │
-├── public/
-│   └── index.html                # Base HTML file
+├── pages/
+│   ├── auth/
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   └── ForgotPassword.jsx
+│   │
+│   ├── client/
+│   │   ├── ClientDashboard.jsx
+│   │   ├── BookMove.jsx
+│   │   ├── Quotes.jsx
+│   │   └── ClientProfile.jsx
+│   │
+│   ├── mover/
+│   │   ├── MoverDashboard.jsx
+│   │   ├── AssignedMoves.jsx
+│   │   └── Inventory.jsx
+│   │
+│   ├── admin/
+│   │   ├── AdminDashboard.jsx
+│   │   ├── Moves.jsx
+│   │   ├── Customers.jsx
+│   │   ├── Analytics.jsx
+│   │   └── Quotes.jsx
 │
-├── src/
-│   ├── assets/                   # Images, icons, static files
+├── components/
+│   ├── navbar/
+│   │   └── Navbar.jsx
 │   │
-│   ├── components/
-│   │   ├── home/                 # Home page sections
-│   │   │   ├── HeroSection.jsx
-│   │   │   ├── FeaturesSection.jsx
-│   │   │   ├── QuotePreview.jsx
-│   │   │   └── CallToAction.jsx
-│   │   │
-│   │   ├── quotes/               # Quotation-related components
-│   │   │   └── QuoteForm.jsx
-│   │   │
-│   │   ├── Navbar.jsx            # Navigation bar
-│   │   ├── Footer.jsx            # Footer component
-│   │   └── ProtectedRoute.jsx    # Role-based route protection
+│   ├── sidebar/
+│   │   └── Sidebar.jsx
 │   │
-│   ├── pages/
-│   │   ├── Home.jsx              # Landing page
-│   │   ├── Quote.jsx             # Full quotation page
-│   │   ├── Booking.jsx           # Booking flow page
-│   │   ├── Tracker.jsx           # Real-time mover tracking
-│   │   ├── Login.jsx             # Login page
-│   │   ├── Register.jsx          # Registration page
-│   │   ├── Dashboard.jsx         # Role-based dashboard
-│   │   └── NotFound.jsx          # 404 page
+│   ├── booking/
+│   │   ├── BookingCard.jsx
+│   │   └── QuoteCard.jsx
 │   │
-│   ├── services/
-│   │   └── api.js                # Backend API communication
+│   ├── inventory/
+│   │   └── InventoryItem.jsx
 │   │
-│   ├── context/
-│   │   └── AuthContext.jsx       # Global authentication state
+│   ├── map/
+│   │   └── MapView.jsx
 │   │
-│   ├── App.jsx                   # Root application component
-│   ├── main.jsx                  # Application entry point
-│   └── index.css                 # Tailwind and global styles
+│   ├── messaging/
+│   │   ├── MessageThread.jsx
+│   │   └── MessageInput.jsx
 │
-├── .gitignore
-├── package.json
-├── tailwind.config.js
-├── postcss.config.js
-├── vite.config.js
-└── README.md
+├── layouts/
+│   ├── ClientLayout.jsx
+│   ├── MoverLayout.jsx
+│   └── AdminLayout.jsx
+│
+├── routes/
+│   ├── ProtectedRoute.jsx
+│   └── AppRoutes.jsx
+│
+├── services/
+│   ├── api.js
+│   ├── authService.js
+│   ├── bookingService.js
+│   └── quotationService.js
+│
+├── hooks/
+│   ├── useAuth.js
+│   └── useRole.js
+│
+├── context/
+│   └── AuthContext.jsx
+│
+├── utils/
+│   ├── formatCurrency.js
+│   └── constants.js
+│
+├── App.jsx
+├── main.jsx
+└── index.css
+
  ## Installation and Setup
 Clone the repository
 git clone https://github.com/your-org/smartmovefrontend.git
