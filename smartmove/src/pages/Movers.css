@@ -1,0 +1,54 @@
+/* Movers page styles - compact, consistent with other pages */
+:root{
+  --bg-light: #f9fafb;
+  --text-main: #111827;
+  --muted: #6b7280;
+}
+
+.animate-fadeIn{animation:fadeIn .25s ease}
+
+.card{
+  background:#fff;
+  border-radius:12px;
+  border:1px solid #e5e7eb;
+  padding:20px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+}
+
+.mb-6{margin-bottom:24px}
+.gap-4{gap:16px}
+.flex{display:flex}
+.flex-col{flex-direction:column}
+.flex-1{flex:1}
+.text-2xl{font-size:20px;font-weight:700;color:var(--text-main)}
+.text-gray-600{color:var(--muted)}
+
+.input-field{width:100%;padding:10px 12px;background:#f3f4f6;border-radius:8px;border:1px solid transparent;font-size:14px}
+.input-field:focus{outline:none;border-color:#c7d2fe;background:#fff}
+.select-field{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #e5e7eb;background:#fff}
+
+.space-y-4 > * + *{margin-top:16px}
+
+.h-16{height:64px}.w-16{width:64px}
+.rounded-2xl{border-radius:18px}
+.bg-indigo-100{background:#e0e7ff;color:#4338ca}
+.text-indigo-600{color:#4f46e5}
+.text-xl{font-size:20px}
+
+.btn-primary{background:#111827;color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer}
+.btn-primary:hover{background:#1f2937}
+
+.hover\:shadow-card-hover:hover{box-shadow:0 6px 18px rgba(31,41,55,0.06)}
+
+.inline-flex{display:inline-flex;align-items:center}
+.rounded-full{border-radius:9999px}
+.px-2\.5{padding-left:10px;padding-right:10px}
+.py-1{padding-top:4px;padding-bottom:4px}
+.text-xs{font-size:12px}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* small responsive tweaks */
+@media (max-width:720px){
+  .flex-col\@sm{flex-direction:column}
+}

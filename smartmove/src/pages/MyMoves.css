@@ -1,0 +1,220 @@
+.my-moves {
+  padding: 40px 80px;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.my-moves * {
+  box-sizing: border-box;
+}
+
+/* Header Section */
+.moves-header {
+  margin-bottom: 32px;
+}
+
+.moves-header h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.moves-header p {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.tabs {
+  display: flex;
+  gap: 12px;
+}
+
+.tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: #111827;
+  color: white;
+}
+
+.btn-new-quote {
+  background: #111827;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+/* Move Card */
+.move-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+  margin-bottom: 40px;
+}
+
+.move-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.move-id-group h2 {
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-badge {
+  background: #dcfce7;
+  color: #166534;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.cost-group {
+  text-align: right;
+}
+
+.cost-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.cost-amount {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Route Info */
+.route-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.info-item {
+  display: flex;
+  gap: 12px;
+}
+
+.info-text span {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.info-text p {
+  font-weight: 500;
+  margin: 2px 0;
+}
+
+/* Progress Bar */
+.progress-container {
+  margin-bottom: 32px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.progress-bar-bg {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #111827;
+  border-radius: 3px;
+}
+
+/* Timeline */
+.timeline {
+  list-style: none;
+  padding: 0;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.timeline-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  z-index: 1;
+}
+
+.timeline-item.completed .timeline-icon {
+  background: #22c55e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.timeline-content h4 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.timeline-content span {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Help Section */
+.help-section {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 40px;
+}
+
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.help-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  font-size: 14px;
+}
+

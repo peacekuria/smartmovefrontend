@@ -1,0 +1,50 @@
+
+/* Clean Services.css - compact and responsive */
+:root{
+  --bg-light:#f9fafb;
+  --text-main:#111827;
+  --text-muted:#6b7280;
+  --border-color:#f3f4f6;
+}
+
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica;background:var(--bg-light)}
+
+.services-page{min-height:100vh;background:var(--bg-light)}
+
+.content-container{max-width:1100px;margin:0 auto;padding:24px 20px}
+
+.services-hero{text-align:center}
+.services-hero h1{font-size:32px;color:var(--text-main);margin:12px 0}
+.services-hero p{color:var(--text-muted);max-width:680px;margin:0 auto}
+
+.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:28px}
+.service-card{background:#fff;border-radius:12px;border:1px solid var(--border-color);overflow:hidden}
+.image-wrapper{height:200px;background:#eee}
+.image-wrapper img{width:100%;height:100%;object-fit:cover}
+.service-content{padding:18px}
+.card-header{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.mini-icon{width:44px;height:44px;border-radius:10px;background:#f3f4f6;display:flex;align-items:center;justify-content:center}
+.card-header h3{margin:0;font-size:16px;color:var(--text-main)}
+.service-desc{margin:0;color:var(--text-muted);font-size:13px}
+
+.feature-list{list-style:none;padding:0;margin:14px 0}
+.feature-list li{display:flex;align-items:center;gap:10px;color:var(--text-muted);font-size:14px;margin-bottom:8px}
+.check{width:18px;height:18px;border-radius:9999px;background:#ecfdf5;color:#10b981;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+
+.service-footer{border-top:1px solid var(--border-color);padding-top:14px;display:flex;align-items:center;gap:12px}
+.price{font-weight:600;color:var(--text-main)}
+.btn-quote-outline{margin-left:auto;background:transparent;border:1px solid #e5e7eb;padding:8px 12px;border-radius:8px;cursor:pointer}
+.btn-quote-outline:hover{background:var(--text-main);color:#fff}
+
+.why-choose{padding:48px 0;text-align:center}
+.usp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.usp-card{background:#fff;border:1px solid var(--border-color);border-radius:12px;padding:18px}
+.usp-icon{font-size:24px;margin-bottom:12px}
+
+.footer-cta{background:#000;color:#fff;padding:60px 20px;text-align:center}
+
+@media (max-width:900px){
+  .services-grid{grid-template-columns:1fr}
+  .usp-grid{grid-template-columns:1fr}
+}
+
