@@ -4,20 +4,37 @@ import "./Home.css";
 export default function Home({ onNavigate }) {
   return (
     <div className="home">
-      {/* Header is rendered globally by the app; page content below */}
+      {/* Navbar */}
+      <header className="navbar">
+        <div className="nav-left">
+          <div className="logo">SmartMove</div>
+          <ul className="nav-links">
+            <li onClick={() => onNavigate("services")}>Services</li>
+            <li onClick={() => onNavigate("inventory")}>Inventory</li>
+            <li onClick={() => onNavigate("mymoves")}>My Moves</li>
+            <li onClick={() => onNavigate("booking")}>Booking</li>
+            <li onClick={() => onNavigate("tracking")}>Track</li>
+          </ul>
+        </div>
+        <div className="nav-right">
+          <button className="btn-link" onClick={() => onNavigate("login")}>
+            Login
+          </button>
+          <button className="btn-primary" onClick={() => onNavigate("signup")}>
+            Sign Up
+          </button>
+        </div>
+      </header>
 
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-text">
           <span className="trust-badge">Trusted by 10,000+ customers</span>
-
           <h1>Your Stress-Free Moving Solution</h1>
-
           <p>
             Professional moving services that make relocation simple, safe, and
             affordable. Get your free quote in minutes.
           </p>
-
           <div className="hero-actions">
             <button
               className="btn-primary"
@@ -27,17 +44,18 @@ export default function Home({ onNavigate }) {
             </button>
             <button
               className="btn-secondary"
-              onClick={() => onNavigate("movers")}
+              onClick={() => onNavigate("services")}
             >
               View Services
             </button>
           </div>
 
-          <div className="features">
-            <div>
+          {/* Features as cards */}
+          <div className="features-cards">
+            <div className="feature-card">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="inline h-4 w-4 mr-2"
+                className="icon"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -49,12 +67,12 @@ export default function Home({ onNavigate }) {
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              Fully Insured & Licensed
+              <span>Fully Insured & Licensed</span>
             </div>
-            <div>
+            <div className="feature-card">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="inline h-4 w-4 mr-2"
+                className="icon"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -66,12 +84,12 @@ export default function Home({ onNavigate }) {
                   d="M12 8v4l3 3"
                 />
               </svg>
-              On-Time Guarantee
+              <span>On-Time Guarantee</span>
             </div>
-            <div>
+            <div className="feature-card">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="inline h-4 w-4 mr-2"
+                className="icon"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -83,12 +101,12 @@ export default function Home({ onNavigate }) {
                   d="M3 7h18M3 12h18M3 17h18"
                 />
               </svg>
-              Transparent Pricing
+              <span>Transparent Pricing</span>
             </div>
-            <div>
+            <div className="feature-card">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="inline h-4 w-4 mr-2"
+                className="icon"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -100,7 +118,7 @@ export default function Home({ onNavigate }) {
                   d="M12 6l2 4 4 .5-3 2 1 4-4-2-4 2 1-4-3-2L10 10 12 6z"
                 />
               </svg>
-              5-Star Rated Service
+              <span>5-Star Rated Service</span>
             </div>
           </div>
         </div>
