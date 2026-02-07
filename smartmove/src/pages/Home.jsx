@@ -18,14 +18,7 @@ export default function Home({ onNavigate }) {
           </ul>
         </div>
 
-        {/* Right Navbar - Roles + Login/Signup */}
         <div className="nav-right">
-          <button className="btn-role" onClick={() => onNavigate("admin")}>
-            Admin
-          </button>
-          <button className="btn-role" onClick={() => onNavigate("mover")}>
-            Mover
-          </button>
           <button className="btn-link" onClick={() => onNavigate("login")}>
             Login
           </button>
@@ -41,97 +34,54 @@ export default function Home({ onNavigate }) {
           <div className="hero-logo">SmartMove</div>
           <h1>Your Stress-Free Moving Solution</h1>
           <p>
-            Professional moving services that make relocation simple, safe, and
-            affordable. Get your free quote in minutes.
+            Plan, book, track, and manage your move — whether you’re relocating,
+            moving professionally, or managing operations.
           </p>
-          <div className="hero-actions">
-            <button
-              className="btn-primary"
-              onClick={() => onNavigate("booking")}
-            >
-              Get Free Quote →
-            </button>
-            <button
-              className="btn-secondary"
-              onClick={() => onNavigate("services")}
-            >
-              View Services
-            </button>
+
+          {/* ROLE SELECTOR */}
+          <div className="role-selector">
+            <h3>Continue as</h3>
+
+            <div className="role-cards">
+              <div
+                className="role-card"
+                onClick={() => onNavigate("login-client")}
+              >
+                <h4>Client</h4>
+                <p>Plan your move, book movers, track inventory.</p>
+                <span>Get Started →</span>
+              </div>
+
+              <div
+                className="role-card"
+                onClick={() => onNavigate("login-mover")}
+              >
+                <h4>Mover</h4>
+                <p>Manage jobs, update status, communicate with clients.</p>
+                <span>Enter Dashboard →</span>
+              </div>
+
+              <div
+                className="role-card admin"
+                onClick={() => onNavigate("login-admin")}
+              >
+                <h4>Admin</h4>
+                <p>Approve movers, monitor bookings, view analytics.</p>
+                <span>Admin Access →</span>
+              </div>
+            </div>
           </div>
 
           {/* Features */}
           <div className="features-cards">
-            <div className="feature-card">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={3}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              <span>Fully Insured & Licensed</span>
-            </div>
-            <div className="feature-card">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4l3 3"
-                />
-              </svg>
-              <span>On-Time Guarantee</span>
-            </div>
-            <div className="feature-card">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 7h18M3 12h18M3 17h18"
-                />
-              </svg>
-              <span>Transparent Pricing</span>
-            </div>
-            <div className="feature-card">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6l2 4 4 .5-3 2 1 4-4-2-4 2 1-4-3-2L10 10 12 6z"
-                />
-              </svg>
-              <span>5-Star Rated Service</span>
-            </div>
+            <div className="feature-card">✔ Fully Insured & Licensed</div>
+            <div className="feature-card">⏱ On-Time Guarantee</div>
+            <div className="feature-card">💰 Transparent Pricing</div>
+            <div className="feature-card">⭐ 5-Star Rated Service</div>
           </div>
         </div>
 
+        {/* HERO IMAGE — UNTOUCHED */}
         <div className="hero-right">
           <img
             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
@@ -142,32 +92,24 @@ export default function Home({ onNavigate }) {
 
       {/* Footer */}
       <footer className="footer">
-        <p>Connect with us:</p>
+        <p>Connect with us</p>
         <div className="social-icons">
-          <a href="https://instagram.com" target="_blank" rel="noreferrer">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
-              alt="Instagram"
-            />
-          </a>
-          <a href="https://wa.me/1234567890" target="_blank" rel="noreferrer">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
-              alt="WhatsApp"
-            />
-          </a>
-          <a href="https://facebook.com" target="_blank" rel="noreferrer">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
-              alt="Facebook"
-            />
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noreferrer">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
-              alt="Twitter"
-            />
-          </a>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+            alt="Instagram"
+          />
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
+            alt="WhatsApp"
+          />
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+            alt="Facebook"
+          />
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
+            alt="Twitter"
+          />
         </div>
       </footer>
     </div>
