@@ -1,27 +1,28 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { FiUser, FiTruck, FiShield } from "react-icons/fi";
+import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 
 export default function Login({ role: initialRole = "client", onSuccess }) {
   const { signIn } = useContext(AuthContext);
 
+  const [role, setRole] = useState(initialRole);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState(initialRole);
   const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Sync role if coming from Home
   useEffect(() => {
     setRole(initialRole);
   }, [initialRole]);
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!email || !password) {
-      toast.error("Please fill in all fields");
+      toast.error("Email and password are required");
       return;
     }
 
@@ -30,12 +31,16 @@ export default function Login({ role: initialRole = "client", onSuccess }) {
       return;
     }
 
+    if (role === "admin" && !email.endsWith("@smartmove.com")) {
+      toast.error("Admin access requires a SmartMove admin email");
+      return;
+    }
+
     setLoading(true);
 
-    // 🔐 MOCK AUTH (replace later)
     setTimeout(() => {
-      if (role === "admin" && email !== "admin@smartmove.com") {
-        toast.error("Admin access requires admin credentials");
+      if (email === "wrong@user.com") {
+        toast.error("Invalid email or password");
         setLoading(false);
         return;
       }
@@ -47,62 +52,77 @@ export default function Login({ role: initialRole = "client", onSuccess }) {
       };
 
       signIn(user);
-      toast.success(`Welcome back, ${role.toUpperCase()} 🎉`);
+      toast.success(`Signed in as ${role}`);
+
       setLoading(false);
+      if (onSuccess) onSuccess(user);
+    }, 900);
+  };
 
-      if (onSuccess) onSuccess(role);
-    }, 800);
-  }
-
-  function handleDemoLogin(demoRole) {
+  const demoLogin = (demoRole) => {
     setLoading(true);
 
     setTimeout(() => {
-      signIn({
+      const demoUser = {
         name: "Demo User",
         email: `${demoRole}@demo.com`,
         role: demoRole,
-      });
+      };
 
-      toast.success(`Logged in as ${demoRole.toUpperCase()}`);
+      signIn(demoUser);
+      toast.info(`Demo access: ${demoRole}`);
       setLoading(false);
 
-      if (onSuccess) onSuccess(demoRole);
-    }, 500);
-  }
+      if (onSuccess) onSuccess(demoUser);
+    }, 600);
+  };
 
   return (
     <div className="login-container">
+      <ToastContainer position="top-right" autoClose={3500} />
+
+      {/* BRAND */}
       <div className="login-logo">
         <div className="logo-box">S</div>
         <h1>SmartMove</h1>
       </div>
 
       <div className="login-card">
-        <h2>
-          {role === "admin" && "Admin Login"}
-          {role === "mover" && "Mover Login"}
-          {role === "client" && "Client Login"}
-        </h2>
+        {/* ROLE PICKER */}
+        <div className="role-picker">
+          <button
+            className={role === "client" ? "active" : ""}
+            onClick={() => setRole("client")}
+          >
+            <FiUser />
+            Client
+          </button>
+          <button
+            className={role === "mover" ? "active" : ""}
+            onClick={() => setRole("mover")}
+          >
+            <FiTruck />
+            Mover
+          </button>
+          <button
+            className={role === "admin" ? "active" : ""}
+            onClick={() => setRole("admin")}
+          >
+            <FiShield />
+            Admin
+          </button>
+        </div>
 
+        {/* HEADER */}
+        <h2>{role.charAt(0).toUpperCase() + role.slice(1)} Login</h2>
         <p>
-          {role === "admin" && "Manage platform operations and approvals"}
-          {role === "mover" && "View jobs, update move status"}
-          {role === "client" && "Manage your moves and bookings"}
+          {role === "client" && "Access bookings, tracking, and invoices"}
+          {role === "mover" && "Manage jobs, schedules, and earnings"}
+          {role === "admin" && "Oversee platform operations and approvals"}
         </p>
 
+        {/* FORM */}
         <form onSubmit={handleSubmit}>
-          {/* ROLE SELECT */}
-          <div className="form-group">
-            <label>Login as</label>
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="client">Client</option>
-              <option value="mover">Mover</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-
-          {/* EMAIL */}
           <div className="form-group">
             <label>Email</label>
             <input
@@ -113,7 +133,6 @@ export default function Login({ role: initialRole = "client", onSuccess }) {
             />
           </div>
 
-          {/* PASSWORD */}
           <div className="form-group">
             <label>Password</label>
             <input
@@ -138,18 +157,19 @@ export default function Login({ role: initialRole = "client", onSuccess }) {
           </button>
         </form>
 
+        {/* DEMO */}
         <div className="divider">
           <span>DEMO ACCESS</span>
         </div>
 
-        <div className="social-group">
-          <button onClick={() => handleDemoLogin("client")}>Demo Client</button>
-          <button onClick={() => handleDemoLogin("mover")}>Demo Mover</button>
-          <button onClick={() => handleDemoLogin("admin")}>Demo Admin</button>
+        <div className="demo-buttons">
+          <button onClick={() => demoLogin("client")}>Client Demo</button>
+          <button onClick={() => demoLogin("mover")}>Mover Demo</button>
+          <button onClick={() => demoLogin("admin")}>Admin Demo</button>
         </div>
 
         <p className="signup-text">
-          New here? <span>Create an account</span>
+          New to SmartMove? <span>Create an account</span>
         </p>
       </div>
 

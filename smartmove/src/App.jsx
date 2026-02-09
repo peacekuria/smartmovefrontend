@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AuthProvider } from "./context/AuthContext";
-import Header from "./components/Header";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Home from "./pages/Home";
 import Services from "./pages/Services";
@@ -26,85 +26,86 @@ export default function App() {
   const [role, setRole] = useState(null);
   const [selectedMover, setSelectedMover] = useState(null);
 
-  /* ----------------------------------
-     Navigation helper
-  ---------------------------------- */
   const navigate = (nextPage) => {
     setPage(nextPage);
   };
 
-  /* ----------------------------------
-     Login success handler
-  ---------------------------------- */
   const handleLoginSuccess = (user) => {
     setRole(user.role);
 
-    if (user.role === "admin") navigate("admin");
-    else if (user.role === "mover") navigate("mover-dashboard");
-    else navigate("client-dashboard");
+    if (user.role === "admin") {
+      setPage("admin");
+    } else if (user.role === "mover") {
+      setPage("mover-dashboard");
+    } else {
+      setPage("client-dashboard");
+    }
   };
 
-  /* ----------------------------------
-     Page renderer
-  ---------------------------------- */
   const renderPage = () => {
     switch (page) {
-      /* Public */
       case "home":
         return <Home onNavigate={navigate} />;
+
       case "services":
         return <Services onNavigate={navigate} />;
+
       case "about":
         return <About onNavigate={navigate} />;
 
-      /* Auth */
       case "login":
-        return <Login onSuccess={handleLoginSuccess} onNavigate={navigate} />;
+        return <Login onSuccess={handleLoginSuccess} />;
+
       case "signup":
+        return <Signup onSuccess={() => setPage("login")} />;
+
+      case "client-dashboard":
         return (
-          <Signup onSuccess={() => navigate("login")} onNavigate={navigate} />
+          <ProtectedRoute userRole={role} allowedRoles={["client"]}>
+            <ClientDashboard />
+          </ProtectedRoute>
         );
 
-      /* Client */
-      case "client-dashboard":
-        return <ClientDashboard />;
+      case "mover-dashboard":
+        return (
+          <ProtectedRoute userRole={role} allowedRoles={["mover"]}>
+            <MoverDashboard />
+          </ProtectedRoute>
+        );
+
+      case "admin":
+        return (
+          <ProtectedRoute userRole={role} allowedRoles={["admin"]}>
+            <Admin />
+          </ProtectedRoute>
+        );
+
       case "mymoves":
         return <MyMoves />;
+
       case "inventory":
         return <Inventory />;
+
       case "movers":
         return (
           <Movers
             onBook={(mover) => {
               setSelectedMover(mover);
-              navigate("booking");
+              setPage("booking");
             }}
           />
         );
+
       case "booking":
         return (
           <Booking
             selectedMover={selectedMover}
-            onConfirm={(details) => {
-              setSelectedMover(null);
-              navigate("mymoves");
-            }}
+            onConfirm={() => setPage("mymoves")}
           />
         );
 
-      /* Map */
       case "map":
         return <MapView />;
-
-      /* Role dashboards */
-      case "admin":
-        return role === "admin" ? <Admin /> : <Home onNavigate={navigate} />;
-      case "mover-dashboard":
-        return role === "mover" ? (
-          <MoverDashboard />
-        ) : (
-          <Home onNavigate={navigate} />
-        );
 
       default:
         return <Home onNavigate={navigate} />;
@@ -113,23 +114,17 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <div className="app">
-        <Header onNavigate={navigate} active={page} role={role} />
+      <main>{renderPage()}</main>
 
-        <main className="container">{renderPage()}</main>
-
-        {/* 🔔 Toast Notifications */}
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          pauseOnHover
-          draggable
-          theme="light"
-        />
-      </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="light"
+      />
     </AuthProvider>
   );
 }

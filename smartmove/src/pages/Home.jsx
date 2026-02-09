@@ -4,19 +4,19 @@ import "./Home.css";
 export default function Home({ onNavigate }) {
   return (
     <div className="home">
-      {/* NAVBAR */}
       <header className="navbar">
         <div className="nav-left">
           <div className="logo" onClick={() => onNavigate("home")}>
             SmartMove
           </div>
+
           <ul className="nav-links">
             <li onClick={() => onNavigate("services")}>Services</li>
             <li onClick={() => onNavigate("about")}>About</li>
             <li onClick={() => onNavigate("inventory")}>Inventory</li>
-            <li onClick={() => onNavigate("find-movers")}>Find Movers</li>
+            <li onClick={() => onNavigate("movers")}>Find Movers</li>
             <li onClick={() => onNavigate("booking")}>Booking</li>
-            <li onClick={() => onNavigate("tracking")}>Track</li>
+            <li onClick={() => onNavigate("map")}>Track</li>
           </ul>
         </div>
 
@@ -30,7 +30,6 @@ export default function Home({ onNavigate }) {
         </div>
       </header>
 
-      {/* HERO */}
       <section className="hero">
         <div className="hero-left">
           <div className="hero-logo">SmartMove</div>
@@ -40,7 +39,6 @@ export default function Home({ onNavigate }) {
             moving professionally, or managing operations.
           </p>
 
-          {/* ROLE SELECTOR */}
           <div className="role-selector">
             <h3>Continue as</h3>
 
@@ -74,12 +72,11 @@ export default function Home({ onNavigate }) {
             </div>
           </div>
 
-          {/* FEATURES */}
           <div className="features-cards">
-            <div className="feature-card">✔ Fully Insured & Licensed</div>
-            <div className="feature-card">⏱ On-Time Guarantee</div>
-            <div className="feature-card">💰 Transparent Pricing</div>
-            <div className="feature-card">⭐ 5-Star Rated Service</div>
+            <div className="feature-card">Fully Insured & Licensed</div>
+            <div className="feature-card">On-Time Guarantee</div>
+            <div className="feature-card">Transparent Pricing</div>
+            <div className="feature-card">5-Star Rated Service</div>
           </div>
         </div>
 
@@ -91,25 +88,28 @@ export default function Home({ onNavigate }) {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="footer">
         <p>Connect with us</p>
         <div className="social-icons">
           <img
             src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
             alt="Instagram"
+            onClick={() => window.open("https://instagram.com", "_blank")}
           />
           <img
             src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
             alt="WhatsApp"
+            onClick={() => window.open("https://wa.me/", "_blank")}
           />
           <img
             src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
             alt="Facebook"
+            onClick={() => window.open("https://facebook.com", "_blank")}
           />
           <img
             src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
             alt="Twitter"
+            onClick={() => window.open("https://twitter.com", "_blank")}
           />
         </div>
       </footer>
