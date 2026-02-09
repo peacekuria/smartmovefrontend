@@ -56,13 +56,56 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
     });
   };
 
-  // Placeholder for Mpesa payment
+  const calculateTotal = () => {
+    const basePrice = 89900;
+    const packingCost = formData.packing ? 15000 : 0;
+    const storageCost = formData.storage ? 20000 : 0;
+    const insuranceCost = formData.insurance ? 10000 : 0;
+    return basePrice + packingCost + storageCost + insuranceCost;
+  };
+
   const handleMpesaPayment = () => {
-    alert("Redirecting to Mpesa for payment...");
-    // Here you would integrate actual Mpesa API
-    // After successful payment:
-    alert("Payment successful! Your quote is confirmed.");
-    onNavigate && onNavigate("home");
+    const total = calculateTotal();
+    const transactionRef = "TXN-" + Date.now();
+
+    // Simulate payment processing
+    const bookingRecord = {
+      id: transactionRef,
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+      from: `${formData.fromAddress}, ${formData.fromCity}`,
+      to: `${formData.toAddress}, ${formData.toCity}`,
+      moveDate: formData.moveDate,
+      amount: total,
+      status: "Completed",
+      paymentMethod: "M-PESA",
+      reference: transactionRef,
+      services: {
+        packing: formData.packing,
+        storage: formData.storage,
+        insurance: formData.insurance,
+      },
+    };
+
+    // Store booking in localStorage for history
+    const existingBookings = JSON.parse(
+      localStorage.getItem("bookingHistory") || "[]",
+    );
+    existingBookings.push(bookingRecord);
+    localStorage.setItem("bookingHistory", JSON.stringify(existingBookings));
+
+    // Show confirmation
+    alert(
+      `Payment Successful!\n\nTransaction Reference: ${transactionRef}\nAmount: KES ${total.toLocaleString()}\n\nYour booking has been confirmed.`,
+    );
+
+    // Navigate back to dashboard
+    const userRole = localStorage.getItem("userRole");
+    if (userRole === "mover") {
+      onNavigate && onNavigate("mover-dashboard");
+    } else {
+      onNavigate && onNavigate("client-dashboard");
+    }
   };
 
   return (
@@ -260,13 +303,45 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
           )}
 
           {currentStep === 5 && (
-            <div className="step-content">
-              <p>
-                You are ready to pay KES 89,900 (example amount). Click below to
-                pay securely via Mpesa.
-              </p>
+            <div className="step-content payment-content">
+              <div className="payment-summary">
+                <h4>Order Summary</h4>
+                <div className="summary-line">
+                  <span>Base Moving Service</span>
+                  <span>KES 89,900</span>
+                </div>
+                {formData.packing && (
+                  <div className="summary-line">
+                    <span>Packing Services</span>
+                    <span>KES 15,000</span>
+                  </div>
+                )}
+                {formData.storage && (
+                  <div className="summary-line">
+                    <span>Storage Services</span>
+                    <span>KES 20,000</span>
+                  </div>
+                )}
+                {formData.insurance && (
+                  <div className="summary-line">
+                    <span>Full Insurance Coverage</span>
+                    <span>KES 10,000</span>
+                  </div>
+                )}
+                <div className="summary-total">
+                  <span>Total Amount</span>
+                  <span>KES {calculateTotal().toLocaleString()}</span>
+                </div>
+              </div>
+              <div className="payment-info">
+                <p className="confidentiality-notice">
+                  All transactions are encrypted and confidential. Your payment
+                  information is processed securely and will never be shared
+                  with third parties.
+                </p>
+              </div>
               <button className="btn-mpesa" onClick={handleMpesaPayment}>
-                Pay with Mpesa
+                Proceed to M-PESA Payment
               </button>
             </div>
           )}
@@ -282,7 +357,10 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
           </div>
         </div>
         <p className="security-note">
-          🔒 Your information is secure and will never be shared
+          Your information is secure and will never be shared.
+        </p>
+        <p className="security-note">
+          All payment information is encrypted and kept strictly confidential.
         </p>
       </div>
     </div>

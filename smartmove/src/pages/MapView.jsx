@@ -31,14 +31,30 @@ export default function MapView({ onNavigate }) {
     }, 600);
   }
 
+  function goBack() {
+    // Prefer returning to the last visited page saved by App.navigate
+    const last = localStorage.getItem("lastPage");
+    if (last && last !== "map") {
+      onNavigate && onNavigate(last);
+      return;
+    }
+
+    // Fallback to role-based dashboard
+    const previousRole = localStorage.getItem("userRole");
+    if (previousRole === "mover") {
+      onNavigate && onNavigate("mover-dashboard");
+    } else if (previousRole === "admin") {
+      onNavigate && onNavigate("admin");
+    } else {
+      onNavigate && onNavigate("client-dashboard");
+    }
+  }
+
   return (
     <div className="mapview-page animate-fadeIn">
       {/* Back Button */}
-      <button
-        className="btn-back-home"
-        onClick={() => onNavigate && onNavigate("home")}
-      >
-        ← Back Home
+      <button className="btn-back-home" onClick={goBack}>
+        ← Back
       </button>
 
       {/* Header */}

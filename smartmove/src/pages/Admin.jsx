@@ -222,6 +222,97 @@ export default function Admin({ onNavigate }) {
     },
   ];
 
+  const companies = [
+    {
+      id: 1,
+      name: "SwiftMove Logistics",
+      moversCount: 8,
+      activeMovesCount: 12,
+      rating: 4.7,
+      commissionRate: "12%",
+      status: "active",
+      monthlyRevenue: "KES 450,000",
+    },
+    {
+      id: 2,
+      name: "EagleMover Kenya",
+      moversCount: 5,
+      activeMovesCount: 7,
+      rating: 4.5,
+      commissionRate: "13%",
+      status: "active",
+      monthlyRevenue: "KES 280,000",
+    },
+    {
+      id: 3,
+      name: "Nairobi Movers Pro",
+      moversCount: 12,
+      activeMovesCount: 18,
+      rating: 4.8,
+      commissionRate: "11%",
+      status: "active",
+      monthlyRevenue: "KES 515,000",
+    },
+    {
+      id: 4,
+      name: "RelocationExperts Ltd",
+      moversCount: 6,
+      activeMovesCount: 5,
+      rating: 4.6,
+      commissionRate: "13%",
+      status: "pending",
+      monthlyRevenue: "KES 210,000",
+    },
+  ];
+
+  const ratings = [
+    {
+      id: 1,
+      userName: "Wanjiku Ndungu",
+      rating: 5,
+      message:
+        "Amazing service! The movers were professional and efficient. Highly recommended!",
+      date: "2026-02-08",
+      category: "service",
+    },
+    {
+      id: 2,
+      userName: "James Omondi",
+      rating: 4,
+      message:
+        "Good experience overall. Arrived on time and handled my belongings carefully.",
+      date: "2026-02-07",
+      category: "reliability",
+    },
+    {
+      id: 3,
+      userName: "Grace Wambui",
+      rating: 5,
+      message:
+        "SmartMove made moving stress-free. The app is intuitive and customer support was excellent.",
+      date: "2026-02-06",
+      category: "app",
+    },
+    {
+      id: 4,
+      userName: "Peter Kamau",
+      rating: 4,
+      message:
+        "Good pricing and decent service. Would use again for my next move.",
+      date: "2026-02-05",
+      category: "pricing",
+    },
+    {
+      id: 5,
+      userName: "Mary Akinyi",
+      rating: 5,
+      message:
+        "Excellent service from booking to delivery. Very professional movers!",
+      date: "2026-02-04",
+      category: "service",
+    },
+  ];
+
   const analyticsData = {
     monthlyRevenue: [
       { month: "Jan", amount: 850000 },
@@ -265,21 +356,29 @@ export default function Admin({ onNavigate }) {
           <p>Manage your moving business operations efficiently</p>
         </div>
         <div className="admin-actions">
-          <button
-            className="btn-social"
-            onClick={() => toast.info("Website portal feature coming soon")}
-          >
-            🌐 View Website
-          </button>
-          <button
-            className="btn-signin"
-            onClick={() => toast.info("Scheduling feature coming soon")}
-          >
-            📅 Schedule Move
-          </button>
-          <button className="btn-logout" onClick={handleLogout}>
-            <FiLogOut /> Logout
-          </button>
+          <div className="header-actions">
+            <button
+              className="btn-secondary"
+              onClick={() => onNavigate && onNavigate("map")}
+            >
+              Open Tracking
+            </button>
+            <button
+              className="btn-social"
+              onClick={() => toast.info("Website portal feature coming soon")}
+            >
+              🌐 View Website
+            </button>
+            <button
+              className="btn-signin"
+              onClick={() => toast.info("Scheduling feature coming soon")}
+            >
+              📅 Schedule Move
+            </button>
+            <button className="btn-logout" onClick={handleLogout}>
+              <FiLogOut /> Logout
+            </button>
+          </div>
         </div>
       </header>
 
@@ -309,6 +408,8 @@ export default function Admin({ onNavigate }) {
           "Quotes",
           "Customers",
           "Movers",
+          "Companies",
+          "Ratings",
           "Analytics",
         ].map((tab) => (
           <div
@@ -501,6 +602,115 @@ export default function Admin({ onNavigate }) {
                     <span className="stat-value-small">{mover.earnings}</span>
                   </div>
                 </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Companies Tab */}
+      {activeTab === "Companies" && (
+        <section className="companies-section">
+          <h2>Moving Companies</h2>
+          <p className="text-muted">Manage affiliated moving companies</p>
+          <div className="companies-grid">
+            {companies.map((company) => (
+              <div key={company.id} className="company-card hover-card">
+                <div className="company-header">
+                  <h3>{company.name}</h3>
+                  <span className={`status-badge status-${company.status}`}>
+                    {company.status}
+                  </span>
+                </div>
+                <div className="company-rating">
+                  {renderStarRating(company.rating)}
+                </div>
+                <div className="company-stats">
+                  <div className="company-stat">
+                    <span className="stat-label">Movers</span>
+                    <span className="stat-value-small">
+                      {company.moversCount}
+                    </span>
+                  </div>
+                  <div className="company-stat">
+                    <span className="stat-label">Active Moves</span>
+                    <span className="stat-value-small">
+                      {company.activeMovesCount}
+                    </span>
+                  </div>
+                </div>
+                <div className="company-details">
+                  <p>
+                    <strong>Commission:</strong> {company.commissionRate}
+                  </p>
+                  <p>
+                    <strong>Monthly Revenue:</strong> {company.monthlyRevenue}
+                  </p>
+                </div>
+                <div className="company-actions">
+                  <button
+                    className="btn-sm"
+                    onClick={() => toast.info("Viewing company details")}
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Ratings Tab */}
+      {activeTab === "Ratings" && (
+        <section className="ratings-section">
+          <h2>Customer Reviews & Ratings</h2>
+          <p className="text-muted">
+            Real feedback from customers using SmartMove
+          </p>
+
+          <div className="ratings-summary">
+            <div className="rating-stat">
+              <div className="stat-big">4.8</div>
+              <div className="stat-label">Average Rating</div>
+              <div className="stars">★★★★★</div>
+            </div>
+            <div className="rating-stat">
+              <div className="stat-big">{ratings.length}</div>
+              <div className="stat-label">Total Reviews</div>
+            </div>
+            <div className="rating-stat">
+              <div className="stat-big">98%</div>
+              <div className="stat-label">Positive Reviews</div>
+            </div>
+          </div>
+
+          <div className="ratings-list">
+            {ratings.map((review) => (
+              <div key={review.id} className="rating-card hover-card">
+                <div className="rating-header">
+                  <div>
+                    <h4>{review.userName}</h4>
+                    <p className="review-category">
+                      {review.category.charAt(0).toUpperCase() +
+                        review.category.slice(1)}
+                    </p>
+                  </div>
+                  <div className="rating-stars">
+                    {[...Array(5)].map((_, i) => (
+                      <span
+                        key={i}
+                        className={
+                          i < review.rating ? "star-filled" : "star-empty"
+                        }
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <p className="review-message">"{review.message}"</p>
+                <p className="review-date">{review.date}</p>
               </div>
             ))}
           </div>

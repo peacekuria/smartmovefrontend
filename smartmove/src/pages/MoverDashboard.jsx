@@ -21,6 +21,18 @@ export default function MoverDashboard({ onNavigate }) {
   const [available, setAvailable] = useState(true);
   const [showEarnings, setShowEarnings] = useState(false);
   const [showIssueForm, setShowIssueForm] = useState(false);
+  const [showPaymentDetails, setShowPaymentDetails] = useState(null);
+
+  const getPaymentHistory = () => {
+    try {
+      return JSON.parse(localStorage.getItem("bookingHistory") || "[]");
+    } catch (e) {
+      return [];
+    }
+  };
+
+  const payments = getPaymentHistory();
+  const totalEarnings = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
 
   const [jobs, setJobs] = useState([
     {
@@ -202,7 +214,7 @@ export default function MoverDashboard({ onNavigate }) {
         <div className="dashboard-card">
           <FiDollarSign className="card-icon" />
           <h3>Total Earnings</h3>
-          <p className="stat">KES 120,000</p>
+          <p className="stat">KES {totalEarnings.toLocaleString()}</p>
           <span>This month</span>
         </div>
       </section>
@@ -220,6 +232,121 @@ export default function MoverDashboard({ onNavigate }) {
         <button onClick={handleReportIssue}>
           <FiAlertTriangle />
           Report an Issue
+          {/* PAYMENT HISTORY */}
+          {payments.length > 0 && (
+            <section className="dashboard-section payment-history-section">
+              <h2>Earnings & Payment History</h2>
+              <div className="confidential-badge">
+                Confidential - Verified Earnings Record
+              </div>
+              <div className="payment-history-list">
+                {payments.map((payment, index) => (
+                  <div key={index} className="payment-item">
+                    <div className="payment-header">
+                      <div className="payment-info-main">
+                        <h4>Transaction #{payment.id}</h4>
+                        <p className="payment-route">
+                          {payment.from} → {payment.to}
+                        </p>
+                        <p className="payment-date">
+                          {payment.date} at {payment.time}
+                        </p>
+                      </div>
+                      <div className="payment-amount">
+                        <span className="amount">
+                          + KES {payment.amount.toLocaleString()}
+                        </span>
+                        <span
+                          className={`status ${payment.status.toLowerCase()}`}
+                        >
+                          {payment.status}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="payment-details">
+                      <div className="detail-item">
+                        <span className="detail-label">Move Date:</span>
+                        <span className="detail-value">{payment.moveDate}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="detail-label">Payment Method:</span>
+                        <span className="detail-value">
+                          {payment.paymentMethod}
+                        </span>
+                      </div>
+                      {payment.services && (
+                        <div className="services-added">
+                          {payment.services.packing && (
+                            <span className="service-tag">
+                              Packing Included
+                            </span>
+                          )}
+                          {payment.services.storage && (
+                            <span className="service-tag">
+                              Storage Included
+                            </span>
+                          )}
+                          {payment.services.insurance && (
+                            <span className="service-tag">
+                              Insurance Included
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      className="btn-view-receipt"
+                      onClick={() =>
+                        setShowPaymentDetails(
+                          showPaymentDetails === index ? null : index,
+                        )
+                      }
+                    >
+                      {showPaymentDetails === index
+                        ? "Hide Receipt"
+                        : "View Receipt"}
+                    </button>
+                    {showPaymentDetails === index && (
+                      <div className="receipt-modal">
+                        <div className="receipt-content">
+                          <h3>Payment Verification Receipt</h3>
+                          <div className="receipt-info">
+                            <p>
+                              <strong>Reference:</strong> {payment.reference}
+                            </p>
+                            <p>
+                              <strong>Amount Earned:</strong> KES{" "}
+                              {payment.amount.toLocaleString()}
+                            </p>
+                            <p>
+                              <strong>Date:</strong> {payment.date}{" "}
+                              {payment.time}
+                            </p>
+                            <p>
+                              <strong>From:</strong> {payment.from}
+                            </p>
+                            <p>
+                              <strong>To:</strong> {payment.to}
+                            </p>
+                            <p>
+                              <strong>Move Date:</strong> {payment.moveDate}
+                            </p>
+                            <p>
+                              <strong>Status:</strong> {payment.status}
+                            </p>
+                            <p className="confidential-note">
+                              This receipt is confidential and issued solely as
+                              verified earnings record for your accounts.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
         </button>
       </section>
 

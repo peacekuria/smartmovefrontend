@@ -19,6 +19,10 @@ import Admin from "./pages/Admin";
 import MoverDashboard from "./pages/MoverDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
 
+import ClientDemo from "./pages/ClientDemo";
+import MoverDemo from "./pages/MoverDemo";
+import AdminDemo from "./pages/AdminDemo";
+
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -26,13 +30,25 @@ export default function App() {
   const [page, setPage] = useState("home");
   const [role, setRole] = useState(null);
   const [selectedMover, setSelectedMover] = useState(null);
+  const [loginRole, setLoginRole] = useState("client");
 
-  const navigate = (nextPage) => {
+  const navigate = (nextPage, options = {}) => {
+    // persist last visited page for context-aware navigation
+    try {
+      localStorage.setItem("lastPage", page || "home");
+    } catch (e) {}
+    if (options.role) {
+      setLoginRole(options.role);
+    }
     setPage(nextPage);
   };
 
   const handleLoginSuccess = (user) => {
     setRole(user.role);
+
+    try {
+      localStorage.setItem("userRole", user.role);
+    } catch (e) {}
 
     if (user.role === "admin") {
       setPage("admin");
@@ -55,12 +71,27 @@ export default function App() {
         return <About onNavigate={navigate} />;
 
       case "login":
-        return <Login onSuccess={handleLoginSuccess} onNavigate={navigate} />;
+        return (
+          <Login
+            role={loginRole}
+            onSuccess={handleLoginSuccess}
+            onNavigate={navigate}
+          />
+        );
 
       case "signup":
         return (
           <Signup onSuccess={() => setPage("login")} onNavigate={navigate} />
         );
+
+      case "client-demo":
+        return <ClientDemo onNavigate={navigate} />;
+
+      case "mover-demo":
+        return <MoverDemo onNavigate={navigate} />;
+
+      case "admin-demo":
+        return <AdminDemo onNavigate={navigate} />;
 
       case "client-dashboard":
         return (

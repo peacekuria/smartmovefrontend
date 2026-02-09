@@ -59,10 +59,23 @@ export default function Inventory({ onNavigate }) {
 
   return (
     <div className="inventory-page">
-      {/* Back Button */}
+      {/* Back Button (returns to last visited page when available) */}
       <div className="inventory-header">
-        <button className="btn-back" onClick={() => onNavigate("home")}>
-          ← Back to Home
+        <button
+          className="btn-back"
+          onClick={() => {
+            const last = localStorage.getItem("lastPage");
+            if (last && last !== "inventory") {
+              onNavigate && onNavigate(last);
+              return;
+            }
+            const role = localStorage.getItem("userRole");
+            if (role === "mover") onNavigate && onNavigate("mover-dashboard");
+            else if (role === "admin") onNavigate && onNavigate("admin");
+            else onNavigate && onNavigate("home");
+          }}
+        >
+          ← Back
         </button>
       </div>
 

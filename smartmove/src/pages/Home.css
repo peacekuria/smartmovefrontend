@@ -179,7 +179,14 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.explore-subtitle {
+  font-size: 14px;
+  color: #9ca3af;
   margin-bottom: 24px;
+  font-weight: 400;
 }
 
 .role-cards {
@@ -254,6 +261,31 @@ body {
   line-height: 1.6;
 }
 
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-demo {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.btn-demo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
 .role-card button {
   background: transparent;
   border: 1px solid #e5e7eb;
@@ -264,7 +296,7 @@ body {
   font-size: 13px;
   color: #374151;
   transition: all 0.2s ease;
-  align-self: flex-start;
+  width: 100%;
 }
 
 .role-card button:hover {

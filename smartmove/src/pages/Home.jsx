@@ -71,6 +71,9 @@ export default function Home({ onNavigate }) {
 
           <div className="role-info">
             <h3>Explore SmartMove</h3>
+            <p className="explore-subtitle">
+              Try a live demo or create an account
+            </p>
 
             <div className="role-cards">
               <div className="role-card client-card">
@@ -101,9 +104,19 @@ export default function Home({ onNavigate }) {
                   Plan your move, book professional movers, track inventory and
                   progress in real-time.
                 </p>
-                <button onClick={() => onNavigate("login")}>
-                  Learn More →
-                </button>
+                <div className="button-group">
+                  <button
+                    className="btn-demo"
+                    onClick={() => onNavigate("client-demo")}
+                  >
+                    ▶ View Demo
+                  </button>
+                  <button
+                    onClick={() => onNavigate("login", { role: "client" })}
+                  >
+                    Get Started →
+                  </button>
+                </div>
               </div>
 
               <div className="role-card mover-card">
@@ -141,9 +154,19 @@ export default function Home({ onNavigate }) {
                   Manage jobs, update move status, communicate with clients, and
                   grow your business.
                 </p>
-                <button onClick={() => onNavigate("login")}>
-                  Learn More →
-                </button>
+                <div className="button-group">
+                  <button
+                    className="btn-demo"
+                    onClick={() => onNavigate("mover-demo")}
+                  >
+                    ▶ View Demo
+                  </button>
+                  <button
+                    onClick={() => onNavigate("login", { role: "mover" })}
+                  >
+                    Get Started →
+                  </button>
+                </div>
               </div>
 
               <div className="role-card admin-card">
@@ -167,9 +190,19 @@ export default function Home({ onNavigate }) {
                   Oversee platform operations, approve movers, monitor bookings,
                   and view analytics.
                 </p>
-                <button onClick={() => onNavigate("login")}>
-                  Learn More →
-                </button>
+                <div className="button-group">
+                  <button
+                    className="btn-demo"
+                    onClick={() => onNavigate("admin-demo")}
+                  >
+                    ▶ View Demo
+                  </button>
+                  <button
+                    onClick={() => onNavigate("login", { role: "admin" })}
+                  >
+                    Get Started →
+                  </button>
+                </div>
               </div>
             </div>
           </div>
