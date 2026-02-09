@@ -9,7 +9,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
@@ -26,7 +26,7 @@
 
 ---
 
-## 🎯 Overview
+## Overview
 
 SmartMove Frontend is a comprehensive solution for managing moving services. It caters to three primary user roles:
 
@@ -38,42 +38,42 @@ The application emphasizes user experience with responsive design, smooth naviga
 
 ---
 
-## ✨ Features
+## Features
 
 ### For Clients
 
-- 📦 **Inventory Management**: Track and organize items for your move
-- 🎯 **Move Booking**: Browse movers and book services with transparent pricing
-- 📍 **Location Pinning**: Pin pickup and drop-off locations on interactive maps
-- 📊 **Real-time Tracking**: Monitor move progress with live updates
-- 📱 **Responsive Dashboard**: Manage all your moves from one place
+- **Inventory Management**: Track and organize items for your move
+- **Move Booking**: Browse movers and book services with transparent pricing
+- **Location Pinning**: Pin pickup and drop-off locations on interactive maps
+- **Real-time Tracking**: Monitor move progress with live updates
+- **Responsive Dashboard**: Manage all your moves from one place
 
 ### For Movers
 
-- 💼 **Job Management**: View available jobs and accept assignments
-- 📈 **Status Updates**: Update move progress in real-time
-- 💬 **Client Communication**: Direct messaging with clients
-- 📊 **Dashboard Analytics**: Track completed moves and earnings
+- **Job Management**: View available jobs and accept assignments
+- **Status Updates**: Update move progress in real-time
+- **Client Communication**: Direct messaging with clients
+- **Dashboard Analytics**: Track completed moves and earnings
 
 ### For Admins
 
-- 👥 **User Management**: Approve and manage mover registrations
-- 📋 **Booking Oversight**: Monitor all platform bookings
-- 📊 **Analytics**: View platform metrics and insights
-- ⚙️ **Content Management**: Manage services and platform settings
+- **User Management**: Approve and manage mover registrations
+- **Booking Oversight**: Monitor all platform bookings
+- **Analytics**: View platform metrics and insights
+- **Content Management**: Manage services and platform settings
 
 ### General Features
 
-- 🔐 **Secure Authentication**: Role-based login and registration
-- 🛡️ **Protected Routes**: Access control based on user roles
-- 🎨 **Professional UI**: Clean, modern, and intuitive interface
-- 📱 **Fully Responsive**: Works seamlessly on desktop, tablet, and mobile
-- 🔔 **Toast Notifications**: Real-time user feedback and alerts
-- 🌐 **Navigation**: Smooth page transitions with global header
+- **Secure Authentication**: Role-based login and registration
+- **Protected Routes**: Access control based on user roles
+- **Professional UI**: Clean, modern, and intuitive interface
+- **Fully Responsive**: Works seamlessly on desktop, tablet, and mobile
+- **Toast Notifications**: Real-time user feedback and alerts
+- **Navigation**: Smooth page transitions with global header
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Category               | Technology                |
 | ---------------------- | ------------------------- |
@@ -87,7 +87,7 @@ The application emphasizes user experience with responsive design, smooth naviga
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 smartmovefrontend/
@@ -158,7 +158,7 @@ smartmovefrontend/
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 
@@ -196,7 +196,7 @@ Ensure you have the following installed:
 
 ---
 
-## ⚡ Getting Started
+## Getting Started
 
 ### Development Server
 
@@ -228,7 +228,7 @@ npm run preview
 
 ---
 
-## 🗺 Available Routes
+## Available Routes
 
 | Route               | Component       | Access Level | Description                        |
 | ------------------- | --------------- | ------------ | ---------------------------------- |
@@ -248,7 +248,7 @@ npm run preview
 
 ---
 
-## 🏗 Component Architecture
+## Component Architecture
 
 ### Component Hierarchy
 
@@ -292,7 +292,7 @@ App (Root)
 
 ---
 
-## 🔐 Authentication & Authorization
+## Authentication & Authorization
 
 ### Authentication Flow
 
@@ -324,7 +324,7 @@ Admin:   admin@smartmove.com + any password
 
 ---
 
-## 🎨 Styling
+## Styling
 
 ### CSS Organization
 
@@ -344,7 +344,7 @@ Admin:   admin@smartmove.com + any password
 
 ---
 
-## 💻 Development
+## Development
 
 ### Code Conventions
 
@@ -366,7 +366,7 @@ Changes to files automatically reload in the browser during development. No manu
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Here's how to get involved:
 
@@ -422,13 +422,13 @@ chore: maintenance tasks
 
 ---
 
-## 📝 License
+## License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 📧 Contact & Support
+## Contact & Support
 
 For questions or support, please:
 
@@ -438,7 +438,7 @@ For questions or support, please:
 
 ---
 
-## 🎉 Acknowledgments
+## Acknowledgments
 
 - Built with React and Vite for optimal performance
 - Designed with modern web standards
@@ -446,6 +446,6 @@ For questions or support, please:
 
 ---
 
-**SmartMove** - Making moving simple, efficient, and stress-free. 🚚
+**SmartMove** - Making moving simple, efficient, and stress-free.
 
 Last Updated: February 2026
