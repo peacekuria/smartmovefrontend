@@ -1,12 +1,33 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { toast, ToastContainer } from "react-toastify";
+import { FiLogOut } from "react-icons/fi";
+import "react-toastify/dist/ReactToastify.css";
 import "./ClientDashboard.css";
 
-export default function ClientDashboard() {
+export default function ClientDashboard({ onNavigate }) {
+  const { signOut, user } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    signOut();
+    toast.success("✅ Logged out successfully");
+    setTimeout(() => {
+      onNavigate && onNavigate("home");
+    }, 800);
+  };
+
   return (
     <div className="client-dashboard">
+      <ToastContainer position="top-right" autoClose={3500} />
+
       <header className="client-header">
-        <h1>Welcome Back 👋</h1>
-        <p>Your moving journey, all in one place</p>
+        <div>
+          <h1>📦 Client Dashboard</h1>
+          <p>Manage your moves and bookings</p>
+        </div>
+        <button className="btn-logout-client" onClick={handleLogout}>
+          <FiLogOut /> Logout
+        </button>
       </header>
 
       <section className="client-grid">
@@ -36,6 +57,38 @@ export default function ClientDashboard() {
         <div className="activity">🚚 Mover assigned to your booking</div>
 
         <div className="activity">💳 Payment pending confirmation</div>
+      </section>
+
+      <section className="client-section">
+        <h2>Quick Actions</h2>
+        <div className="action-buttons">
+          <button
+            className="action-btn"
+            onClick={() => {
+              toast.success("🚚 Taking you to book a move...");
+              setTimeout(() => onNavigate("movers"), 600);
+            }}
+          >
+            Book a Move
+          </button>
+          <button
+            className="action-btn"
+            onClick={() => {
+              toast.success("📍 Loading your move tracking...");
+              setTimeout(() => onNavigate("map"), 600);
+            }}
+          >
+            Track Move
+          </button>
+          <button
+            className="action-btn contact-btn"
+            onClick={() => {
+              toast.info("📞 Support team will contact you shortly");
+            }}
+          >
+            Contact Support
+          </button>
+        </div>
       </section>
     </div>
   );

@@ -1,61 +1,179 @@
 .client-dashboard {
   padding: 40px;
-  background: #ffffff;
+  background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
   min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+.client-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
 }
 
 .client-header h1 {
   font-size: 32px;
   font-weight: 800;
-  color: #111827;
+  color: #2563eb;
+  margin: 0;
 }
 
 .client-header p {
   color: #6b7280;
-  margin-bottom: 32px;
+  margin: 8px 0 0 0;
+  font-size: 14px;
+}
+
+.btn-logout-client {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #ef4444;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.btn-logout-client:hover {
+  background: #dc2626;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.2);
 }
 
 .client-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
   margin-bottom: 40px;
 }
 
 .client-card {
-  background: #f9fafb;
+  background: #ffffff;
   padding: 24px;
-  border-radius: 16px;
+  border-radius: 14px;
+  border: 2px solid #dbeafe;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+  transition: all 0.3s ease;
+}
+
+.client-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
 }
 
 .client-card h3 {
-  color: #374151;
-  margin-bottom: 8px;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .client-card .big {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
+  color: #2563eb;
+  margin: 8px 0;
+}
+
+.client-card span {
+  font-size: 13px;
+  color: #6b7280;
 }
 
 .status-pill {
   display: inline-block;
-  padding: 6px 14px;
+  padding: 8px 16px;
   background: #dcfce7;
   color: #166534;
-  border-radius: 999px;
-  font-size: 12px;
+  border-radius: 20px;
+  font-size: 13px;
   font-weight: 600;
 }
 
 .client-section h2 {
-  font-size: 22px;
-  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+}
+
+.client-section {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+  border-left: 4px solid #2563eb;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
 }
 
 .activity {
-  background: #f3f4f6;
-  padding: 14px 18px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  padding: 12px;
+  background: #f0f4ff;
+  border-radius: 8px;
+  color: #374151;
+  border-left: 3px solid #2563eb;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.activity:last-child {
+  margin-bottom: 0;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.action-btn {
+  padding: 12px 16px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.action-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.action-btn.contact-btn {
+  background: #8b5cf6;
+  border: 1px solid #a78bfa;
+}
+
+.action-btn.contact-btn:hover {
+  background: #7c3aed;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+@media (max-width: 768px) {
+  .client-dashboard {
+    padding: 20px;
+  }
+
+  .client-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .client-header h1 {
+    font-size: 24px;
+  }
+
+  .action-buttons {
+    grid-template-columns: 1fr;
+  }
 }

@@ -73,6 +73,12 @@ export default function Header({ onNavigate, active }) {
           >
             Track
           </button>
+          <button
+            className={`nav-link ${active === "support" ? "text-indigo-600" : ""}`}
+            onClick={() => onNavigate("support")}
+          >
+            Support
+          </button>
           {user && user.role === "admin" && (
             <button
               className={`nav-link ${active === "admin" ? "text-indigo-600" : ""}`}

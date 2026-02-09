@@ -13,6 +13,7 @@ import Inventory from "./pages/Inventory";
 import Movers from "./pages/Movers";
 import Booking from "./pages/Booking";
 import MapView from "./pages/MapView";
+import Support from "./pages/Support";
 
 import Admin from "./pages/Admin";
 import MoverDashboard from "./pages/MoverDashboard";
@@ -110,6 +111,9 @@ export default function App() {
 
       case "map":
         return <MapView onNavigate={navigate} />;
+
+      case "support":
+        return <Support onNavigate={navigate} />;
 
       default:
         return <Home onNavigate={navigate} />;

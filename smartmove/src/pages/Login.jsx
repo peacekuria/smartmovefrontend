@@ -22,17 +22,19 @@ export default function Login({ role: initialRole = "client", onSuccess }) {
     e.preventDefault();
 
     if (!email || !password) {
-      toast.error("Email and password are required");
+      toast.error("❌ Email and password are required");
       return;
     }
 
     if (password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error("❌ Password must be at least 6 characters");
       return;
     }
 
     if (role === "admin" && !email.endsWith("@smartmove.com")) {
-      toast.error("Admin access requires a SmartMove admin email");
+      toast.error(
+        "❌ Admin access requires a SmartMove admin email (@smartmove.com)",
+      );
       return;
     }
 
@@ -40,7 +42,7 @@ export default function Login({ role: initialRole = "client", onSuccess }) {
 
     setTimeout(() => {
       if (email === "wrong@user.com") {
-        toast.error("Invalid email or password");
+        toast.error("❌ Invalid email or password. Please try again.");
         setLoading(false);
         return;
       }
@@ -52,7 +54,14 @@ export default function Login({ role: initialRole = "client", onSuccess }) {
       };
 
       signIn(user);
-      toast.success(`Signed in as ${role}`);
+
+      const roleDisplay = role.charAt(0).toUpperCase() + role.slice(1);
+      toast.success(
+        `✅ Welcome ${user.name}! Logged in as ${roleDisplay}. Redirecting...`,
+        {
+          autoClose: 2000,
+        },
+      );
 
       setLoading(false);
       if (onSuccess) onSuccess(user);
@@ -70,7 +79,15 @@ export default function Login({ role: initialRole = "client", onSuccess }) {
       };
 
       signIn(demoUser);
-      toast.info(`Demo access: ${demoRole}`);
+
+      const roleDisplay = demoRole.charAt(0).toUpperCase() + demoRole.slice(1);
+      toast.success(
+        `✅ Demo access granted! Logged in as ${roleDisplay}. Redirecting...`,
+        {
+          autoClose: 2000,
+        },
+      );
+
       setLoading(false);
 
       if (onSuccess) onSuccess(demoUser);
