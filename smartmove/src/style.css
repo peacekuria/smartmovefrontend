@@ -1,20 +1,32 @@
-/* Tailwind directives — MUST be first */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Your custom CSS variables */
 :root {
   --color-app-bg: #f9fafb;
   --color-app-card: #ffffff;
   --color-app-muted: #6b7280;
   --color-app-accent: #4f46e5;
   --color-app-accent-600: #4338ca;
-  --font-sans: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans:
+    Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
 
   /* Custom shadows */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-card-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+:root {
+  --color-app-bg: #f9fafb;
+  --color-app-card: #ffffff;
+  --color-app-muted: #6b7280;
+  --color-app-accent: #4f46e5;
+  --color-app-accent-600: #4338ca;
+  --font-sans:
+    Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+
+  /* Custom shadows */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* Your custom styles follow */
@@ -29,6 +41,34 @@ body {
   background-color: var(--color-app-bg);
   color: #111827;
   line-height: 1.6;
+}
+
+/* Small set of utility/button classes used across the app */
+.btn-primary {
+  background: var(--color-app-accent);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-app-accent);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-back,
+.btn-back-home {
+  background: transparent;
+  border: none;
+  color: #374151;
+  padding: 6px 8px;
+  cursor: pointer;
 }
 
 /* ...rest of your CSS here... */

@@ -13,10 +13,15 @@ import Inventory from "./pages/Inventory";
 import Movers from "./pages/Movers";
 import Booking from "./pages/Booking";
 import MapView from "./pages/MapView";
+import Support from "./pages/Support";
 
 import Admin from "./pages/Admin";
 import MoverDashboard from "./pages/MoverDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
+
+import ClientDemo from "./pages/ClientDemo";
+import MoverDemo from "./pages/MoverDemo";
+import AdminDemo from "./pages/AdminDemo";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,13 +30,25 @@ export default function App() {
   const [page, setPage] = useState("home");
   const [role, setRole] = useState(null);
   const [selectedMover, setSelectedMover] = useState(null);
+  const [loginRole, setLoginRole] = useState("client");
 
-  const navigate = (nextPage) => {
+  const navigate = (nextPage, options = {}) => {
+    // persist last visited page for context-aware navigation
+    try {
+      localStorage.setItem("lastPage", page || "home");
+    } catch (e) {}
+    if (options.role) {
+      setLoginRole(options.role);
+    }
     setPage(nextPage);
   };
 
   const handleLoginSuccess = (user) => {
     setRole(user.role);
+
+    try {
+      localStorage.setItem("userRole", user.role);
+    } catch (e) {}
 
     if (user.role === "admin") {
       setPage("admin");
@@ -54,41 +71,59 @@ export default function App() {
         return <About onNavigate={navigate} />;
 
       case "login":
-        return <Login onSuccess={handleLoginSuccess} />;
+        return (
+          <Login
+            role={loginRole}
+            onSuccess={handleLoginSuccess}
+            onNavigate={navigate}
+          />
+        );
 
       case "signup":
-        return <Signup onSuccess={() => setPage("login")} />;
+        return (
+          <Signup onSuccess={() => setPage("login")} onNavigate={navigate} />
+        );
+
+      case "client-demo":
+        return <ClientDemo onNavigate={navigate} />;
+
+      case "mover-demo":
+        return <MoverDemo onNavigate={navigate} />;
+
+      case "admin-demo":
+        return <AdminDemo onNavigate={navigate} />;
 
       case "client-dashboard":
         return (
           <ProtectedRoute userRole={role} allowedRoles={["client"]}>
-            <ClientDashboard />
+            <ClientDashboard onNavigate={navigate} />
           </ProtectedRoute>
         );
 
       case "mover-dashboard":
         return (
           <ProtectedRoute userRole={role} allowedRoles={["mover"]}>
-            <MoverDashboard />
+            <MoverDashboard onNavigate={navigate} />
           </ProtectedRoute>
         );
 
       case "admin":
         return (
           <ProtectedRoute userRole={role} allowedRoles={["admin"]}>
-            <Admin />
+            <Admin onNavigate={navigate} />
           </ProtectedRoute>
         );
 
       case "mymoves":
-        return <MyMoves />;
+        return <MyMoves onNavigate={navigate} />;
 
       case "inventory":
-        return <Inventory />;
+        return <Inventory onNavigate={navigate} />;
 
       case "movers":
         return (
           <Movers
+            onNavigate={navigate}
             onBook={(mover) => {
               setSelectedMover(mover);
               setPage("booking");
@@ -99,13 +134,17 @@ export default function App() {
       case "booking":
         return (
           <Booking
+            onNavigate={navigate}
             selectedMover={selectedMover}
             onConfirm={() => setPage("mymoves")}
           />
         );
 
       case "map":
-        return <MapView />;
+        return <MapView onNavigate={navigate} />;
+
+      case "support":
+        return <Support onNavigate={navigate} />;
 
       default:
         return <Home onNavigate={navigate} />;

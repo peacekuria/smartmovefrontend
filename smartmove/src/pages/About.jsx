@@ -1,24 +1,42 @@
 import React from "react";
 import "./About.css";
 
-export default function About() {
+export default function About({ onNavigate }) {
   return (
     <div className="about-page">
+      {/* Back Button */}
+      <button
+        className="btn-back-about"
+        onClick={() => onNavigate && onNavigate("home")}
+      >
+        ← Back Home
+      </button>
       {/* Hero */}
       <section className="about-hero">
         <div className="hero-content">
+          {/* SmartMove Logo Icon */}
+          <div className="smartmove-logo-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
           <span>Est. 2011</span>
           <h1>Moving People Forward for Over a Decade</h1>
           <p>
             We're more than just a moving company. We're your partners in
             transition, committed to making every move a positive experience.
           </p>
-          <button
-            className="btn-primary"
-            style={{ background: "#000", color: "#fff" }}
-          >
-            Get Started →
-          </button>
+          <button className="btn-primary btn-dark">Get Started →</button>
         </div>
         <div className="hero-image">
           <img
@@ -82,7 +100,7 @@ export default function About() {
       </section>
 
       {/* Values */}
-      <h2 style={{ textAlign: "center", margin: "40px 0" }}>Our Values</h2>
+      <h2 className="section-title-center">Our Values</h2>
       <div className="values-grid">
         <ValueCard
           icon={
@@ -167,9 +185,7 @@ export default function About() {
       </div>
 
       {/* Leadership */}
-      <h2 style={{ textAlign: "center", margin: "40px 0" }}>
-        Meet Our Leadership
-      </h2>
+      <h2 className="section-title-center">Meet Our Leadership</h2>
       <div className="leadership-grid">
         <LeaderCard
           name="Jennifer Martinez"
