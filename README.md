@@ -2,11 +2,6 @@
 
 **SmartMove** is a modern, professional React-based web application that streamlines the moving industry by providing comprehensive solutions for clients, movers, and administrators. This frontend application offers intuitive interfaces for booking moves, tracking inventory, managing jobs, and overseeing platform operations.
 
-[![React](https://img.shields.io/badge/React-18.2-blue?logo=react)](https://react.dev)
-[![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?logo=vite)](https://vitejs.dev)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs)](https://nodejs.org)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-
 ---
 
 ##  Table of Contents
