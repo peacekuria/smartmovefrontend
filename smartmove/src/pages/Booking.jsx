@@ -1,7 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
 import "./Booking.css";
 
 export default function Booking({ onNavigate, selectedMover, onConfirm }) {
+  const { user } = useContext(AuthContext);
+  const moversRef = useRef();
+  const [localSelectedMover, setLocalSelectedMover] = useState(
+    selectedMover || null,
+  );
+
+  const MOVERS = [
+    { id: 1, name: "QuickMove Ltd", rating: 4.7 },
+    { id: 2, name: "SafeHands Movers", rating: 4.5 },
+    { id: 3, name: "BudgetMove", rating: 4.0 },
+  ];
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     moveType: "",
@@ -21,6 +33,46 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
     phone: "",
     email: "",
   });
+
+  const [bookedDates, setBookedDates] = useState(new Set());
+
+  useEffect(() => {
+    try {
+      const existing = JSON.parse(
+        localStorage.getItem("bookingHistory") || "[]",
+      );
+      const dates = new Set(existing.map((b) => b.moveDate).filter(Boolean));
+      setBookedDates(dates);
+    } catch (e) {
+      setBookedDates(new Set());
+    }
+  }, []);
+
+  const todayIso = new Date().toISOString().split("T")[0];
+
+  const handleDateChange = (e) => {
+    const value = e.target.value;
+    if (!value) {
+      setFormData({ ...formData, moveDate: "" });
+      return;
+    }
+
+    // Prevent past dates
+    if (value < todayIso) {
+      alert("Please choose a date today or in the future.");
+      setFormData({ ...formData, moveDate: "" });
+      return;
+    }
+
+    // Prevent booking on already-booked dates
+    if (bookedDates.has(value)) {
+      alert("Sorry — that date is already booked. Please choose another day.");
+      setFormData({ ...formData, moveDate: "" });
+      return;
+    }
+
+    setFormData({ ...formData, moveDate: value });
+  };
 
   const steps = [
     { label: "Move Details", sub: "Where & when" },
@@ -48,6 +100,21 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
     }
   };
 
+  function handleBookFromList(mover) {
+    if (user && (user.role === "client" || user.role === "mover")) {
+      setLocalSelectedMover(mover);
+      // scroll to booking form
+      setTimeout(() => {
+        document
+          .querySelector(".booking-card")
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 120);
+    } else {
+      // prompt login as client by default
+      onNavigate && onNavigate("login", { role: "client" });
+    }
+  }
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -65,6 +132,24 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
   };
 
   const handleMpesaPayment = () => {
+    // require signed-in user (client or mover) before allowing payment
+    if (!user || (user.role !== "client" && user.role !== "mover")) {
+      onNavigate && onNavigate("login", { role: "client" });
+      return;
+    }
+    // ensure move date selected
+    if (!formData.moveDate) {
+      alert("Please select a preferred move date before proceeding.");
+      setCurrentStep(1);
+      return;
+    }
+
+    // disallow booking if date already taken (race-safe check)
+    if (bookedDates.has(formData.moveDate)) {
+      alert("That move date has just been booked. Please select another date.");
+      setCurrentStep(1);
+      return;
+    }
     const total = calculateTotal();
     const transactionRef = "TXN-" + Date.now();
 
@@ -85,6 +170,9 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
         storage: formData.storage,
         insurance: formData.insurance,
       },
+      user: user
+        ? { name: user.name, email: user.email, role: user.role }
+        : null,
     };
 
     // Store booking in localStorage for history
@@ -93,6 +181,15 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
     );
     existingBookings.push(bookingRecord);
     localStorage.setItem("bookingHistory", JSON.stringify(existingBookings));
+
+    // update local bookedDates set so UI reflects newly reserved date
+    try {
+      setBookedDates((prev) => {
+        const next = new Set(prev);
+        if (bookingRecord.moveDate) next.add(bookingRecord.moveDate);
+        return next;
+      });
+    } catch (e) {}
 
     // Show confirmation
     alert(
@@ -110,6 +207,56 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
 
   return (
     <div className="booking-page">
+      {/* Available movers list (visible to all) */}
+      <div
+        className="available-movers"
+        ref={moversRef}
+        style={{ maxWidth: 1100, margin: "24px auto" }}
+      >
+        <h3>Available Moving Companies</h3>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+            gap: 12,
+          }}
+        >
+          {MOVERS.map((m) => (
+            <div
+              key={m.id}
+              style={{
+                padding: 12,
+                background: "#fff",
+                borderRadius: 12,
+                boxShadow: "0 8px 20px rgba(2,6,23,0.04)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <strong>{m.name}</strong>
+                  <div style={{ fontSize: 13, color: "#6b7280" }}>
+                    {m.rating} ★
+                  </div>
+                </div>
+                <div>
+                  <button
+                    className="btn-demo"
+                    onClick={() => handleBookFromList(m)}
+                  >
+                    Book
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="booking-content">
         <div className="booking-header">
           <h2>Get Your Moving Quote</h2>
@@ -162,8 +309,16 @@ export default function Booking({ onNavigate, selectedMover, onConfirm }) {
                   name="moveDate"
                   className="form-input"
                   value={formData.moveDate}
-                  onChange={handleChange}
+                  onChange={handleDateChange}
+                  min={todayIso}
                 />
+                {bookedDates && bookedDates.size > 0 && (
+                  <div style={{ marginTop: 8, fontSize: 13, color: "#b91c1c" }}>
+                    Unavailable dates:{" "}
+                    {Array.from(bookedDates).slice(0, 5).join(", ")}
+                    {bookedDates.size > 5 ? "..." : ""}
+                  </div>
+                )}
               </div>
               <LocationGroup
                 title="Moving From"

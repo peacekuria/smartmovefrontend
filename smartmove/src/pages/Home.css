@@ -3,19 +3,25 @@
   box-sizing: border-box;
 }
 
+html,
 body {
+  height: auto;
   margin: 0;
   font-family: "Inter", system-ui, sans-serif;
   color: #1f2937;
   background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 /* LAYOUT */
 .home {
   width: 100%;
-  min-height: 100vh;
+  min-height: auto;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 /* NAVBAR */
@@ -124,11 +130,15 @@ body {
 /* HERO */
 .hero {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* make right column slightly larger so the image fills more space */
+  grid-template-columns: 45% 55%;
   align-items: center;
-  gap: 80px;
-  padding: 100px 60px;
+  gap: 40px;
+  padding: 56px 48px;
   flex-grow: 1;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  padding-top: 56px;
+  min-height: 620px;
 }
 
 .hero-left {
@@ -153,24 +163,24 @@ body {
 }
 
 .hero-left h1 {
-  font-size: 52px;
+  font-size: 48px;
   font-weight: 900;
-  line-height: 1.2;
-  margin-bottom: 24px;
+  line-height: 1.25;
+  margin-bottom: 20px;
   color: #111827;
-  letter-spacing: -1px;
+  letter-spacing: -0.8px;
 }
 
 .hero-left p {
-  font-size: 18px;
+  font-size: 17px;
   color: #6b7280;
-  margin-bottom: 48px;
-  line-height: 1.7;
+  margin-bottom: 32px;
+  line-height: 1.75;
 }
 
 /* ROLE INFO - Informative Cards */
 .role-info {
-  margin-bottom: 56px;
+  margin-bottom: 40px;
 }
 
 .role-info h3 {
@@ -197,18 +207,18 @@ body {
 
 .role-card {
   border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 32px 24px;
+  border-radius: 12px;
+  padding: 28px 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   background: #ffffff;
   display: flex;
   flex-direction: column;
 }
 
 .role-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
   border-color: #d1d5db;
 }
 
@@ -340,46 +350,220 @@ body {
 /* HERO IMAGE */
 .hero-right img {
   width: 100%;
-  border-radius: 24px;
-  height: 520px;
+  border-radius: 20px;
+  /* let the image occupy the full hero height for a fuller look */
+  height: 100%;
+  min-height: 520px;
   object-fit: cover;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.1);
+  display: block;
+}
+
+/* HOW IT WORKS */
+.how-it-works {
+  padding: 40px 48px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.how-it-works .container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.how-title {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.step {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.03);
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.step-number {
+  min-width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #eef2ff;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.step h5 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+}
+
+.step p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* TESTIMONIALS */
+.testimonials {
+  padding: 32px 48px 56px;
+}
+
+.testimonials .container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.testimonials h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.testimonial-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 16px;
+  box-shadow: 0 8px 28px rgba(2, 6, 23, 0.04);
+}
+
+.stars {
+  color: #f59e0b;
+  margin-bottom: 8px;
+}
+
+.testimonial-card p {
+  color: #374151;
+  margin: 8px 0 0 0;
+  font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+  .steps,
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .how-it-works,
+  .testimonials {
+    padding: 36px 24px;
+  }
 }
 
 /* FOOTER */
 .footer {
-  background: #111827;
+  background: #0b1220;
   color: #fff;
-  padding: 80px 40px 60px;
-  text-align: center;
+  padding: 56px 28px 40px;
 }
 
-.footer p {
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.footer-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.footer h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.footer p.notice {
   color: #9ca3af;
-  margin-bottom: 24px;
+  margin: 0 0 12px 0;
+  font-size: 14px;
+}
+
+.footer a {
+  display: block;
+  color: #cbd5e1;
+  text-decoration: none;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.footer a:hover {
+  color: #ffffff;
+}
+
+.footer .contact-item {
+  color: #cbd5e1;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.newsletter {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.newsletter input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+.newsletter button {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.footer-bottom {
+  margin-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #9ca3af;
+  font-size: 13px;
 }
 
 .social-icons {
   display: flex;
-  justify-content: center;
-  gap: 28px;
+  gap: 16px;
 }
 
 .social-icons img {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  filter: brightness(0.8);
+  transition: all 0.18s ease;
+  filter: brightness(0.9);
 }
 
 .social-icons img:hover {
+  transform: translateY(-3px) scale(1.08);
   filter: brightness(1);
-  transform: scale(1.15);
 }
 
 /* RESPONSIVE */
@@ -387,8 +571,9 @@ body {
   .hero {
     grid-template-columns: 1fr;
     text-align: center;
-    padding: 80px 40px;
-    gap: 60px;
+    padding: 56px 32px;
+    gap: 48px;
+    min-height: auto;
   }
 
   .hero-left {
@@ -447,6 +632,6 @@ body {
   }
 
   .hero-right img {
-    height: 300px;
+    height: 320px;
   }
 }

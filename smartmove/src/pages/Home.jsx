@@ -1,48 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Home.css";
 
 export default function Home({ onNavigate }) {
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+
+  const handleSubscribe = () => {
+    const email = (newsletterEmail || "").trim();
+    const valid = /^\S+@\S+\.\S+$/.test(email);
+    if (!valid) {
+      alert("Please enter a valid email address to subscribe.");
+      return;
+    }
+
+    // demo behavior: acknowledge subscription
+    alert("Thanks for subscribing — we'll keep you updated.");
+    setNewsletterEmail("");
+  };
+
   return (
     <div className="home">
-      <header className="navbar">
-        <div className="nav-left">
-          <div className="logo" onClick={() => onNavigate("home")}>
-            <svg
-              className="logo-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            SmartMove
-          </div>
-
-          <ul className="nav-links">
-            <li onClick={() => onNavigate("services")}>Services</li>
-            <li onClick={() => onNavigate("about")}>About</li>
-            <li onClick={() => onNavigate("inventory")}>Inventory</li>
-            <li onClick={() => onNavigate("movers")}>Find Movers</li>
-            <li onClick={() => onNavigate("booking")}>Booking</li>
-            <li onClick={() => onNavigate("map")}>Track</li>
-          </ul>
-        </div>
-
-        <div className="nav-right">
-          <button className="btn-link" onClick={() => onNavigate("login")}>
-            Login
-          </button>
-          <button className="btn-primary" onClick={() => onNavigate("signup")}>
-            Sign Up
-          </button>
-        </div>
-      </header>
+      {/* Global header is rendered by `Header` component in App.jsx */}
 
       <section className="hero">
         <div className="hero-left">
@@ -72,7 +49,8 @@ export default function Home({ onNavigate }) {
           <div className="role-info">
             <h3>Explore SmartMove</h3>
             <p className="explore-subtitle">
-              Try a live demo or create an account
+              Try a live demo or create an account below to experience the full
+              platform
             </p>
 
             <div className="role-cards">
@@ -235,29 +213,210 @@ export default function Home({ onNavigate }) {
         </div>
       </section>
 
+      <section className="how-it-works">
+        <div className="container">
+          <div className="how-title">
+            <h3>How SmartMove Works</h3>
+            <p className="explore-subtitle">
+              Three simple steps to get your move started
+            </p>
+          </div>
+
+          <div className="steps">
+            <div className="step">
+              <div className="step-number">1</div>
+              <div>
+                <h5>Plan Your Move</h5>
+                <p>
+                  Use our guided planner to list items, pick services, and
+                  choose dates that fit your schedule.
+                </p>
+              </div>
+            </div>
+
+            <div className="step">
+              <div className="step-number">2</div>
+              <div>
+                <h5>Book Trusted Movers</h5>
+                <p>
+                  Compare mover profiles, reviews, and prices — then book
+                  certified professionals with one click.
+                </p>
+              </div>
+            </div>
+
+            <div className="step">
+              <div className="step-number">3</div>
+              <div>
+                <h5>Track & Manage</h5>
+                <p>
+                  Monitor inventory, chat with your movers, and get real-time
+                  updates until delivery is complete.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="testimonials">
+        <div className="container">
+          <h3>What Customers Say</h3>
+          <p className="explore-subtitle" style={{ textAlign: "center" }}>
+            Real reviews from clients who trusted SmartMove
+          </p>
+
+          <div className="testimonial-grid">
+            <div className="testimonial-card">
+              <div className="stars">★★★★★</div>
+              <strong>Alex P.</strong>
+              <p>
+                Fast, professional, and great communication — made our move
+                painless.
+              </p>
+            </div>
+
+            <div className="testimonial-card">
+              <div className="stars">★★★★★</div>
+              <strong>Sara L.</strong>
+              <p>
+                Transparent pricing and the movers were careful with our
+                furniture. Highly recommend.
+              </p>
+            </div>
+
+            <div className="testimonial-card">
+              <div className="stars">★★★★☆</div>
+              <strong>Devin R.</strong>
+              <p>
+                Good service and helpful support — small hiccup resolved
+                quickly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <footer className="footer">
-        <p>Connect with us</p>
-        <div className="social-icons">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
-            alt="Instagram"
-            onClick={() => window.open("https://instagram.com", "_blank")}
-          />
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
-            alt="WhatsApp"
-            onClick={() => window.open("https://wa.me/", "_blank")}
-          />
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
-            alt="Facebook"
-            onClick={() => window.open("https://facebook.com", "_blank")}
-          />
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
-            alt="Twitter"
-            onClick={() => window.open("https://twitter.com", "_blank")}
-          />
+        <div className="footer-container">
+          <div className="footer-about">
+            <h4>SmartMove</h4>
+            <p className="notice">
+              Your stress-free moving solution — plan, book, and track moves
+              with confidence.
+            </p>
+            <div className="social-icons">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+                alt="Instagram"
+                onClick={() => window.open("https://instagram.com", "_blank")}
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
+                alt="WhatsApp"
+                onClick={() => window.open("https://wa.me/", "_blank")}
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                alt="Facebook"
+                onClick={() => window.open("https://facebook.com", "_blank")}
+              />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/733/733579.png"
+                alt="Twitter"
+                onClick={() => window.open("https://twitter.com", "_blank")}
+              />
+            </div>
+          </div>
+
+          <div className="footer-links">
+            <h4>Quick Links</h4>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate("services");
+              }}
+            >
+              Services
+            </a>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate("about");
+              }}
+            >
+              About
+            </a>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate("inventory");
+              }}
+            >
+              Inventory
+            </a>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate("booking");
+              }}
+            >
+              Booking
+            </a>
+          </div>
+
+          <div className="footer-contact">
+            <h4>Contact</h4>
+            <p className="contact-item">123 Main St, Suite 200, City</p>
+            <p className="contact-item">Email: support@smartmove.example</p>
+            <p className="contact-item">Phone: +1 (555) 123-4567</p>
+          </div>
+
+          <div className="footer-newsletter">
+            <h4>Stay Updated</h4>
+            <p className="notice">
+              Subscribe for updates, tips, and promotions.
+            </p>
+            <div className="newsletter">
+              <input
+                placeholder="Your email"
+                aria-label="newsletter email"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+              />
+              <button onClick={handleSubscribe}>Subscribe</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <div>
+            © {new Date().getFullYear()} SmartMove. All rights reserved.
+          </div>
+          <div className="footer-legal">
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate("support");
+              }}
+            >
+              Support
+            </a>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate("about");
+              }}
+            >
+              About
+            </a>
+          </div>
         </div>
       </footer>
     </div>

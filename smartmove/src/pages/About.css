@@ -1,6 +1,7 @@
 .about-page {
   font-family: "Inter", sans-serif;
   color: #111827;
+  background: #ffffff;
 }
 
 /* Back Button */
@@ -47,15 +48,19 @@
 
 /* Hero & Stats Section */
 .about-hero {
-  padding: 80px 8%;
+  padding: 56px 6%;
   display: flex;
   align-items: center;
-  gap: 60px;
-  background: #f9fafb;
+  gap: 40px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  justify-content: center;
 }
 
 .hero-content {
-  flex: 1;
+  flex: 0 1 640px;
+  max-width: 640px;
+  text-align: center;
+  margin: 0 auto;
 }
 .hero-content span {
   font-size: 14px;
@@ -79,18 +84,19 @@
 }
 
 .hero-image {
-  flex: 1;
+  flex: 0 1 360px;
 }
 .hero-image img {
   width: 100%;
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  max-width: 360px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 .stats-bar {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  padding: 60px 8%;
+  padding: 48px 6%;
   text-align: center;
   background: #fff;
   border-bottom: 1px solid #f3f4f6;
@@ -110,7 +116,7 @@
 
 /* Story & History Section */
 .story-section {
-  padding: 100px 8%;
+  padding: 72px 6%;
   text-align: center;
 }
 
@@ -138,6 +144,8 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .history-card {
@@ -186,11 +194,33 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
-  padding: 0 8% 100px;
+  padding: 0 3% 8px;
+  max-width: 1100px;
+  margin: 0 auto;
+  
+  
 }
 
 .leadership-grid {
   grid-template-columns: repeat(3, 1fr);
+  max-width: 900px;
+  margin: 0 auto 80px;
+}
+
+@media (max-width: 1024px) {
+  .about-hero {
+    flex-direction: column;
+    padding: 40px 4%;
+  }
+  .hero-image {
+    max-width: 100%;
+    margin-top: 20px;
+  }
+  .values-grid,
+  .leadership-grid,
+  .history-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .value-card,

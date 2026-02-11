@@ -36,7 +36,12 @@ export default function About({ onNavigate }) {
             We're more than just a moving company. We're your partners in
             transition, committed to making every move a positive experience.
           </p>
-          <button className="btn-primary btn-dark">Get Started →</button>
+          <button
+            className="btn-primary btn-dark"
+            onClick={() => onNavigate && onNavigate("signup")}
+          >
+            Get Started →
+          </button>
         </div>
         <div className="hero-image">
           <img
@@ -69,7 +74,7 @@ export default function About({ onNavigate }) {
       {/* Story */}
       <section className="story-section">
         <div className="section-header">
-          <span>Our Story</span>
+          <span></span>
           <p>
             SmartMove was founded in 2011 with a simple mission: to transform
             the moving industry by putting customers first.
@@ -187,20 +192,16 @@ export default function About({ onNavigate }) {
       {/* Leadership */}
       <h2 className="section-title-center">Meet Our Leadership</h2>
       <div className="leadership-grid">
+        <LeaderCard name="Ednah Kimani" role="CEO & Founder" initial="EK" />
         <LeaderCard
-          name="Jennifer Martinez"
-          role="CEO & Founder"
-          initial="JM"
-        />
-        <LeaderCard
-          name="David Thompson"
+          name="Ephraim peace"
           role="Operations Director"
-          initial="DT"
+          initial="EP"
         />
         <LeaderCard
-          name="Sarah Chen"
+          name="Hillary Atingo"
           role="Customer Success Lead"
-          initial="SC"
+          initial="HA"
         />
       </div>
 
@@ -225,8 +226,18 @@ export default function About({ onNavigate }) {
           Join thousands of satisfied customers who trusted us with their move.
         </p>
         <div className="cta-buttons">
-          <button className="btn-primary">Get Free Quote →</button>
-          <button className="btn-secondary">View Services</button>
+          <button
+            className="btn-primary"
+            onClick={() => onNavigate && onNavigate("booking")}
+          >
+            Get Free Quote →
+          </button>
+          <button
+            className="btn-secondary"
+            onClick={() => onNavigate && onNavigate("services")}
+          >
+            View Services
+          </button>
         </div>
       </section>
     </div>

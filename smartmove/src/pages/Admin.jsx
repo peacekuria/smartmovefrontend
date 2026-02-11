@@ -12,8 +12,32 @@ import "react-toastify/dist/ReactToastify.css";
 import "./AdminDashboard.css";
 
 export default function Admin({ onNavigate }) {
-  const { signOut } = useContext(AuthContext);
+  const { signOut, user } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("Overview");
+  const [bookings, setBookings] = useState([]);
+
+  // load bookings from localStorage for scheduling management
+  React.useEffect(() => {
+    try {
+      const all = JSON.parse(localStorage.getItem("bookingHistory") || "[]");
+      setBookings(all.reverse());
+    } catch (e) {
+      setBookings([]);
+    }
+  }, []);
+
+  const saveBookings = (next) => {
+    try {
+      localStorage.setItem(
+        "bookingHistory",
+        JSON.stringify(next.slice().reverse()),
+      );
+      setBookings(next);
+      toast.success("Schedule updated");
+    } catch (e) {
+      toast.error("Failed to save schedule");
+    }
+  };
 
   const handleLogout = () => {
     signOut();
@@ -187,6 +211,8 @@ export default function Admin({ onNavigate }) {
       completedMoves: 156,
       earnings: "KES 2,450,000",
       availability: "available",
+      // demo: assigned admin email limiting visibility
+      assignedTo: "admin@smartmove.com",
     },
     {
       id: 2,
@@ -195,6 +221,7 @@ export default function Admin({ onNavigate }) {
       completedMoves: 98,
       earnings: "KES 1,560,000",
       availability: "available",
+      assignedTo: "admin@smartmove.com",
     },
     {
       id: 3,
@@ -203,6 +230,7 @@ export default function Admin({ onNavigate }) {
       completedMoves: 203,
       earnings: "KES 3,240,000",
       availability: "busy",
+      assignedTo: "otheradmin@example.com",
     },
     {
       id: 4,
@@ -211,6 +239,7 @@ export default function Admin({ onNavigate }) {
       completedMoves: 67,
       earnings: "KES 950,000",
       availability: "available",
+      assignedTo: "otheradmin@example.com",
     },
     {
       id: 5,
@@ -219,6 +248,7 @@ export default function Admin({ onNavigate }) {
       completedMoves: 142,
       earnings: "KES 2,130,000",
       availability: "available",
+      assignedTo: null,
     },
   ];
 
@@ -408,6 +438,7 @@ export default function Admin({ onNavigate }) {
           "Quotes",
           "Customers",
           "Movers",
+          "Scheduling",
           "Companies",
           "Ratings",
           "Analytics",
@@ -604,6 +635,79 @@ export default function Admin({ onNavigate }) {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+      )}
+
+      {/* Scheduling Tab */}
+      {activeTab === "Scheduling" && (
+        <section className="scheduling-section scrollable">
+          <h2>Scheduling</h2>
+          <p className="text-muted">
+            Assign movers to bookings and manage schedule
+          </p>
+
+          <div className="scheduling-list">
+            {bookings.length === 0 ? (
+              <div className="empty-state">No bookings found.</div>
+            ) : (
+              bookings.map((b) => (
+                <div key={b.id} className="booking-item hover-card">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: 12,
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontWeight: 700 }}>
+                        {b.reference || b.id}
+                      </div>
+                      <div style={{ color: "#6b7280" }}>
+                        {b.from} → {b.to}
+                      </div>
+                      <div style={{ marginTop: 6 }}>
+                        Date: {b.moveDate || "TBD"}
+                      </div>
+                    </div>
+                    <div style={{ minWidth: 240 }}>
+                      <label style={{ fontSize: 13, color: "#374151" }}>
+                        Assign Mover
+                      </label>
+                      <select
+                        value={b.assignedMoverId || ""}
+                        onChange={(e) => {
+                          const moverId = e.target.value
+                            ? Number(e.target.value)
+                            : null;
+                          const next = bookings.map((x) =>
+                            x.id === b.id
+                              ? { ...x, assignedMoverId: moverId }
+                              : x,
+                          );
+                          saveBookings(next);
+                        }}
+                        style={{ width: "100%", padding: "8px", marginTop: 6 }}
+                      >
+                        <option value="">-- Unassigned --</option>
+                        {movers
+                          .filter((m) => {
+                            if (user && user.role === "admin")
+                              return m.assignedTo === user.email;
+                            return true;
+                          })
+                          .map((m) => (
+                            <option key={m.id} value={m.id}>
+                              {m.name} ({m.availability})
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </section>
       )}

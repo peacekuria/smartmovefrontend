@@ -25,6 +25,8 @@ import AdminDemo from "./pages/AdminDemo";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "./components/Header";
+import AccessDenied from "./components/AccessDenied";
 
 export default function App() {
   const [page, setPage] = useState("home");
@@ -61,8 +63,41 @@ export default function App() {
 
   const renderPage = () => {
     switch (page) {
-      case "home":
-        return <Home onNavigate={navigate} />;
+      case "map": {
+        const storedRole = role || localStorage.getItem("userRole");
+        let allow = false;
+        if (storedRole === "mover" || storedRole === "admin") {
+          allow = true;
+        } else if (storedRole === "client") {
+          try {
+            const bookings = JSON.parse(
+              localStorage.getItem("bookingHistory") || "[]",
+            );
+            allow = bookings.some(
+              (b) => b.status === "Completed" || b.status === "completed",
+            );
+          } catch (e) {
+            allow = false;
+          }
+        }
+
+        if (!allow)
+          return (
+            <AccessDenied
+              message={
+                "Tracking is available to movers, admins, or clients with a verified booking."
+              }
+              onNavigate={navigate}
+              required={["mover", "admin", "client (with booking)"]}
+            />
+          );
+
+        return <MapView onNavigate={navigate} />;
+      }
+      case "signup":
+        return (
+          <Signup onSuccess={() => setPage("login")} onNavigate={navigate} />
+        );
 
       case "services":
         return <Services onNavigate={navigate} />;
@@ -74,14 +109,9 @@ export default function App() {
         return (
           <Login
             role={loginRole}
-            onSuccess={handleLoginSuccess}
+            onSuccess={(user) => handleLoginSuccess(user)}
             onNavigate={navigate}
           />
-        );
-
-      case "signup":
-        return (
-          <Signup onSuccess={() => setPage("login")} onNavigate={navigate} />
         );
 
       case "client-demo":
@@ -95,30 +125,58 @@ export default function App() {
 
       case "client-dashboard":
         return (
-          <ProtectedRoute userRole={role} allowedRoles={["client"]}>
+          <ProtectedRoute
+            userRole={role}
+            allowedRoles={["client"]}
+            onNavigate={navigate}
+          >
             <ClientDashboard onNavigate={navigate} />
           </ProtectedRoute>
         );
 
       case "mover-dashboard":
         return (
-          <ProtectedRoute userRole={role} allowedRoles={["mover"]}>
+          <ProtectedRoute
+            userRole={role}
+            allowedRoles={["mover"]}
+            onNavigate={navigate}
+          >
             <MoverDashboard onNavigate={navigate} />
           </ProtectedRoute>
         );
 
       case "admin":
         return (
-          <ProtectedRoute userRole={role} allowedRoles={["admin"]}>
+          <ProtectedRoute
+            userRole={role}
+            allowedRoles={["admin"]}
+            onNavigate={navigate}
+          >
             <Admin onNavigate={navigate} />
           </ProtectedRoute>
         );
 
       case "mymoves":
-        return <MyMoves onNavigate={navigate} />;
+        return (
+          <ProtectedRoute
+            userRole={role}
+            allowedRoles={["client", "mover", "admin"]}
+            onNavigate={navigate}
+          >
+            <MyMoves onNavigate={navigate} />
+          </ProtectedRoute>
+        );
 
       case "inventory":
-        return <Inventory onNavigate={navigate} />;
+        return (
+          <ProtectedRoute
+            userRole={role}
+            allowedRoles={["client", "mover"]}
+            onNavigate={navigate}
+          >
+            <Inventory onNavigate={navigate} />
+          </ProtectedRoute>
+        );
 
       case "movers":
         return (
@@ -126,7 +184,13 @@ export default function App() {
             onNavigate={navigate}
             onBook={(mover) => {
               setSelectedMover(mover);
-              setPage("booking");
+              if (role === "client") {
+                setPage("booking");
+              } else {
+                // prompt login as client if not logged-in client
+                setLoginRole("client");
+                setPage("login");
+              }
             }}
           />
         );
@@ -140,8 +204,28 @@ export default function App() {
           />
         );
 
-      case "map":
+      case "map": {
+        const storedRole = role || localStorage.getItem("userRole");
+        let allow = false;
+        if (storedRole === "mover" || storedRole === "admin") {
+          allow = true;
+        } else if (storedRole === "client") {
+          try {
+            const bookings = JSON.parse(
+              localStorage.getItem("bookingHistory") || "[]",
+            );
+            allow = bookings.some(
+              (b) => b.status === "Completed" || b.status === "completed",
+            );
+          } catch (e) {
+            allow = false;
+          }
+        }
+
+        if (!allow) return null;
+
         return <MapView onNavigate={navigate} />;
+      }
 
       case "support":
         return <Support onNavigate={navigate} />;
@@ -153,6 +237,7 @@ export default function App() {
 
   return (
     <AuthProvider>
+      <Header onNavigate={navigate} active={page} />
       <main>{renderPage()}</main>
 
       <ToastContainer

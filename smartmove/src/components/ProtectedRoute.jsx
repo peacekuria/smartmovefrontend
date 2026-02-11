@@ -1,12 +1,30 @@
 import React from "react";
+import AccessDenied from "./AccessDenied";
 
-export default function ProtectedRoute({ userRole, allowedRoles, children }) {
+export default function ProtectedRoute({
+  userRole,
+  allowedRoles,
+  children,
+  onNavigate,
+}) {
   if (!userRole) {
-    return null;
+    return (
+      <AccessDenied
+        message={"You must be signed in to access this page."}
+        onNavigate={onNavigate}
+        required={allowedRoles}
+      />
+    );
   }
 
   if (!allowedRoles.includes(userRole)) {
-    return null;
+    return (
+      <AccessDenied
+        message={"Your account does not have the required permissions."}
+        onNavigate={onNavigate}
+        required={allowedRoles}
+      />
+    );
   }
 
   return children;

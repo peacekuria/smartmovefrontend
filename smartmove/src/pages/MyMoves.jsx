@@ -1,21 +1,50 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./MyMoves.css";
+import { AuthContext } from "../context/AuthContext";
 
 export default function MyMoves({ onNavigate }) {
-  const steps = [
-    { label: "Quote Requested", date: "Jan 15, 2026", status: "completed" },
-    { label: "Quote Approved", date: "Jan 16, 2026", status: "completed" },
-    { label: "Move Scheduled", date: "Jan 18, 2026", status: "completed" },
-    { label: "Packing Day", date: "Pending", status: "upcoming" },
-    { label: "Moving Day", date: "Pending", status: "upcoming" },
-    { label: "Move Completed", date: "Pending", status: "upcoming" },
-  ];
+  const { user } = useContext(AuthContext);
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    try {
+      const all = JSON.parse(localStorage.getItem("bookingHistory") || "[]");
+      // if user present, show only their bookings; admins see all
+      const list =
+        user && user.role !== "admin"
+          ? all.filter((b) => b.user && b.user.email === user.email)
+          : all;
+      setBookings(list.reverse());
+    } catch (e) {
+      setBookings([]);
+    }
+  }, [user]);
+
+  const deleteBooking = (id) => {
+    if (!confirm("Delete this completed booking? This cannot be undone."))
+      return;
+    try {
+      const all = JSON.parse(localStorage.getItem("bookingHistory") || "[]");
+      const remaining = all.filter((b) => b.id !== id);
+      localStorage.setItem("bookingHistory", JSON.stringify(remaining));
+      setBookings(
+        remaining
+          .filter(
+            (b) =>
+              !user ||
+              user.role === "admin" ||
+              (b.user && b.user.email === user.email),
+          )
+          .reverse(),
+      );
+    } catch (e) {}
+  };
 
   return (
     <div className="my-moves">
-      {/* Back to Home */}
       <div className="moves-home-btn">
         <button onClick={() => onNavigate && onNavigate("home")}>
+          {" "}
           ← Back to Home
         </button>
       </div>
@@ -26,8 +55,24 @@ export default function MyMoves({ onNavigate }) {
 
         <div className="header-actions">
           <div className="tabs">
-            <button className="tab active">Upcoming Moves (1)</button>
-            <button className="tab">Past Moves (1)</button>
+            <button className="tab active">
+              Upcoming Moves (
+              {
+                bookings.filter(
+                  (b) => b.status !== "Completed" && b.status !== "completed",
+                ).length
+              }
+              )
+            </button>
+            <button className="tab">
+              Past Moves (
+              {
+                bookings.filter(
+                  (b) => b.status === "Completed" || b.status === "completed",
+                ).length
+              }
+              )
+            </button>
           </div>
           <button
             className="btn-new-quote"
@@ -38,118 +83,66 @@ export default function MyMoves({ onNavigate }) {
         </div>
       </header>
 
-      <main className="move-card">
-        <div className="move-card-header">
-          <div className="move-id-group">
-            <h2>
-              Move ID: MV-2026-001{" "}
-              <span className="status-badge">Scheduled</span>
-            </h2>
-            <p className="service-tag">Inter-City Move</p>
+      <main>
+        {bookings.length === 0 ? (
+          <div className="empty-state">
+            <p>No moves found. Create a new booking to get started.</p>
+            <button onClick={() => onNavigate && onNavigate("booking")}>
+              New Booking
+            </button>
           </div>
-          <div className="cost-group">
-            <span className="cost-label">Estimated Cost</span>
-            <span className="cost-amount">KES 89,900</span>
-          </div>
-        </div>
+        ) : (
+          bookings.map((b) => (
+            <div key={b.id} className="move-card">
+              <div className="move-card-header">
+                <div>
+                  <h3>Booking {b.reference || b.id}</h3>
+                  <p className="service-tag">Move Date: {b.moveDate}</p>
+                </div>
+                <div>
+                  <strong>
+                    KES {b.amount?.toLocaleString?.() || b.amount}
+                  </strong>
+                </div>
+              </div>
 
-        <div className="route-info">
-          <div className="info-item">
-            <div className="info-text">
-              <span>From</span>
-              <p>Kilimani, Nairobi</p>
-            </div>
-          </div>
-          <div className="info-item">
-            <div className="info-text">
-              <span>To</span>
-              <p>Milimani, Kisumu</p>
-            </div>
-          </div>
-          <div className="info-item">
-            <div className="info-text">
-              <span>Move Date</span>
-              <p>February 15, 2026</p>
-            </div>
-          </div>
-        </div>
+              <div className="route-info">
+                <div className="info-item">
+                  <div className="info-text">
+                    <span>From</span>
+                    <p>{b.from}</p>
+                  </div>
+                </div>
+                <div className="info-item">
+                  <div className="info-text">
+                    <span>To</span>
+                    <p>{b.to}</p>
+                  </div>
+                </div>
+                <div className="info-item">
+                  <div className="info-text">
+                    <span>Status</span>
+                    <p>{b.status}</p>
+                  </div>
+                </div>
+              </div>
 
-        <div className="progress-container">
-          <div className="progress-header">
-            <span>Move Progress</span>
-            <span>40%</span>
-          </div>
-          <div className="progress-bar-bg">
-            <div className="progress-bar-fill" style={{ width: "40%" }}></div>
-          </div>
-        </div>
-
-        <ul className="timeline">
-          {steps.map((step, index) => (
-            <li key={index} className={`timeline-item ${step.status}`}>
-              <div className="timeline-icon">
-                {step.status === "completed" ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="icon-check"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="icon-pending"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <circle cx="12" cy="12" r="9" strokeWidth={2} />
-                  </svg>
+              <div className="card-actions">
+                <button onClick={() => onNavigate && onNavigate("support")}>
+                  Contact Support
+                </button>
+                {(b.status === "Completed" || b.status === "completed") && (
+                  <button onClick={() => deleteBooking(b.id)}>Delete</button>
                 )}
               </div>
-              <div className="timeline-content">
-                <h4>{step.label}</h4>
-                <span>{step.date}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-
-        <div className="card-actions">
-          <button className="tab">Contact Support</button>
-          <button className="tab">View Details</button>
-        </div>
+            </div>
+          ))
+        )}
       </main>
 
       <section className="help-section">
         <h3>Need Help?</h3>
         <p className="service-tag">Our team is here to assist you</p>
-        <div className="help-grid">
-          <div className="help-card">
-            <strong>Call Us</strong>
-            <p>(800) 555-MOVE</p>
-          </div>
-          <div className="help-card">
-            <strong>Email Support</strong>
-            <p>help@smartmove.com</p>
-          </div>
-          <div
-            className="help-card"
-            onClick={() => onNavigate && onNavigate("booking")}
-            style={{ cursor: "pointer" }}
-          >
-            <strong>New Quote</strong>
-            <p>Get started now</p>
-          </div>
-        </div>
       </section>
     </div>
   );
