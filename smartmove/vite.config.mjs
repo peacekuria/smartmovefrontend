@@ -8,4 +8,16 @@ export default defineConfig({
     react(),
     tailwind(), // add the Tailwind plugin
   ],
+  build: {
+    outDir: "../../build", // Output to backend's build directory
+    emptyOutDir: true,
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:5001",
+        changeOrigin: true,
+      },
+    },
+  },
 });

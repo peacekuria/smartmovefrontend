@@ -28,6 +28,11 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import AccessDenied from "./components/AccessDenied";
 
+// Import API test utilities for development
+if (import.meta.env.DEV) {
+  import("./utils/apiTest");
+}
+
 export default function App() {
   const [page, setPage] = useState("home");
   const [role, setRole] = useState(null);
