@@ -69,7 +69,7 @@ export default function Services({ onNavigate }) {
           <ServiceCard
             title="Specialty Items"
             description="Moving delicate and valuable items"
-            image="https://images.unsplash.com/photo-1566121316354-f2a402d4850d?auto=format&fit=crop&q=80&w=800"
+            image="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800"
             features={[
               "Piano and organ moving",
               "Fine art transportation",
