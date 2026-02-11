@@ -1,9 +1,97 @@
-import React, { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./MapView.css";
+import { MapsService } from "../services/mapsService";
 
 export default function MapView({ onNavigate }) {
   const [pin, setPin] = useState("");
   const [trackingStatus, setTrackingStatus] = useState("idle");
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState(null);
+  const mapRef = useRef(null);
+  const googleMapRef = useRef(null);
+  const markerRef = useRef(null);
+  const autocompleteRef = useRef(null);
+
+  // Load Google Maps on component mount
+  useEffect(() => {
+    async function initMap() {
+      try {
+        console.log("Fetching Google Maps API key...");
+        // Fetch API key from backend
+        const apiKey = await MapsService.getApiKey();
+        console.log("API key received, loading Google Maps script...");
+
+        // Load Google Maps script
+        await MapsService.loadGoogleMapsScript(apiKey);
+        console.log("Google Maps script loaded successfully");
+
+        // Initialize map
+        if (mapRef.current && window.google) {
+          const defaultCenter = { lat: -1.286389, lng: 36.817223 }; // Nairobi, Kenya
+
+          googleMapRef.current = new window.google.maps.Map(mapRef.current, {
+            center: defaultCenter,
+            zoom: 12,
+            mapTypeControl: true,
+            streetViewControl: true,
+            fullscreenControl: true,
+          });
+
+          // Initialize marker
+          markerRef.current = new window.google.maps.Marker({
+            map: googleMapRef.current,
+            position: defaultCenter,
+            title: "Your Location",
+            animation: window.google.maps.Animation.DROP,
+          });
+
+          console.log("Map initialized successfully");
+          setMapLoaded(true);
+        }
+      } catch (error) {
+        console.error("Failed to initialize map:", error);
+        setMapError(`Failed to load map: ${error.message}`);
+      }
+    }
+
+    initMap();
+  }, []);
+
+  // Initialize autocomplete when map is loaded
+  useEffect(() => {
+    if (mapLoaded && window.google && autocompleteRef.current) {
+      const autocomplete = new window.google.maps.places.Autocomplete(
+        autocompleteRef.current,
+        {
+          componentRestrictions: { country: "ke" }, // Restrict to Kenya
+          fields: [
+            "address_components",
+            "geometry",
+            "name",
+            "formatted_address",
+          ],
+        },
+      );
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (place.geometry) {
+          const location = place.geometry.location;
+          googleMapRef.current.setCenter(location);
+          googleMapRef.current.setZoom(15);
+
+          markerRef.current.setPosition(location);
+          markerRef.current.setAnimation(window.google.maps.Animation.BOUNCE);
+          setTimeout(() => {
+            markerRef.current.setAnimation(null);
+          }, 2000);
+
+          setPin(place.name || place.formatted_address);
+          setTrackingStatus("active");
+        }
+      });
+    }
+  }, [mapLoaded]);
 
   function enableNotifications() {
     if (!("Notification" in window))
@@ -24,11 +112,78 @@ export default function MapView({ onNavigate }) {
       alert("Please enter an address or coordinates");
       return;
     }
+
+    if (!window.google || !googleMapRef.current) {
+      alert("Map is not loaded yet. Please wait.");
+      return;
+    }
+
     setTrackingStatus("pinning");
-    setTimeout(() => {
-      setTrackingStatus("active");
-      alert(`Location pinned: ${pin}`);
-    }, 600);
+
+    // Use Geocoding API to convert address to coordinates
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address: pin }, (results, status) => {
+      if (status === "OK" && results[0]) {
+        const location = results[0].geometry.location;
+
+        googleMapRef.current.setCenter(location);
+        googleMapRef.current.setZoom(15);
+
+        markerRef.current.setPosition(location);
+        markerRef.current.setAnimation(window.google.maps.Animation.BOUNCE);
+        setTimeout(() => {
+          markerRef.current.setAnimation(null);
+        }, 2000);
+
+        setTrackingStatus("active");
+        alert(`Location pinned: ${results[0].formatted_address}`);
+      } else {
+        setTrackingStatus("idle");
+        alert("Location not found. Please try a different address.");
+      }
+    });
+  }
+
+  function useCurrentLocation() {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setTrackingStatus("pinning");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const location = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+
+        if (googleMapRef.current && markerRef.current) {
+          googleMapRef.current.setCenter(location);
+          googleMapRef.current.setZoom(15);
+
+          markerRef.current.setPosition(location);
+          markerRef.current.setAnimation(window.google.maps.Animation.BOUNCE);
+          setTimeout(() => {
+            markerRef.current.setAnimation(null);
+          }, 2000);
+
+          // Reverse geocode to get address
+          const geocoder = new window.google.maps.Geocoder();
+          geocoder.geocode({ location }, (results, status) => {
+            if (status === "OK" && results[0]) {
+              setPin(results[0].formatted_address);
+            }
+          });
+
+          setTrackingStatus("active");
+        }
+      },
+      (error) => {
+        setTrackingStatus("idle");
+        alert("Unable to retrieve your location: " + error.message);
+      },
+    );
   }
 
   function goBack() {
@@ -70,30 +225,55 @@ export default function MapView({ onNavigate }) {
         <div className="lg:col-span-2">
           <div className="card map-card overflow-hidden rounded-xl shadow-lg">
             <div className="map-container">
-              <div className="map-placeholder">
-                <div className="placeholder-icon">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-10 w-10 text-indigo-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0121 18.382V7.618a1 1 0 01-1.447-.894L15 7m0 13V7"
-                    />
-                  </svg>
+              {mapError ? (
+                <div className="map-placeholder">
+                  <div className="placeholder-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-10 w-10 text-red-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-red-500 font-medium">{mapError}</p>
                 </div>
-                <p className="text-gray-500 font-medium">
-                  Interactive Map Preview
-                </p>
-                <p className="text-sm text-gray-400">
-                  Enter an address to view your location
-                </p>
-              </div>
+              ) : !mapLoaded ? (
+                <div className="map-placeholder">
+                  <div className="placeholder-icon">
+                    <svg
+                      className="animate-spin h-10 w-10 text-indigo-600"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <p className="text-gray-500 font-medium">Loading Map...</p>
+                </div>
+              ) : (
+                <div ref={mapRef} style={{ width: "100%", height: "100%" }} />
+              )}
             </div>
 
             {/* Pin Input */}
@@ -103,13 +283,19 @@ export default function MapView({ onNavigate }) {
               </label>
               <div className="flex gap-3 flex-wrap">
                 <input
+                  ref={autocompleteRef}
                   type="text"
                   placeholder="Enter address or coordinates"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
                   className="input-field flex-1"
+                  disabled={!mapLoaded}
                 />
-                <button onClick={pinLocation} className="btn-primary">
+                <button
+                  onClick={pinLocation}
+                  className="btn-primary"
+                  disabled={!mapLoaded}
+                >
                   Pin Location
                 </button>
               </div>
@@ -216,20 +402,26 @@ export default function MapView({ onNavigate }) {
               Quick Actions
             </h3>
             <div className="space-y-3">
-              {["Current Location", "Saved Locations", "Route Planner"].map(
-                (action, idx) => (
-                  <button key={idx} className="quick-action-btn">
-                    <p className="font-medium text-gray-900">{action}</p>
-                    <p className="text-sm text-gray-500">
-                      {action === "Current Location"
-                        ? "Use GPS to pin current location"
-                        : action === "Saved Locations"
-                          ? "Access previously saved addresses"
-                          : "Plan your moving route"}
-                    </p>
-                  </button>
-                ),
-              )}
+              <button
+                onClick={useCurrentLocation}
+                className="quick-action-btn"
+                disabled={!mapLoaded}
+              >
+                <p className="font-medium text-gray-900">Current Location</p>
+                <p className="text-sm text-gray-500">
+                  Use GPS to pin current location
+                </p>
+              </button>
+              <button className="quick-action-btn" disabled>
+                <p className="font-medium text-gray-900">Saved Locations</p>
+                <p className="text-sm text-gray-500">
+                  Access previously saved addresses
+                </p>
+              </button>
+              <button className="quick-action-btn" disabled>
+                <p className="font-medium text-gray-900">Route Planner</p>
+                <p className="text-sm text-gray-500">Plan your moving route</p>
+              </button>
             </div>
           </div>
         </div>

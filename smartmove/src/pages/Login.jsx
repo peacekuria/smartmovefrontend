@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { toast, ToastContainer } from "react-toastify";
+import { apiPost } from "../utils/api"; // Import apiPost
 import {
   FiUser,
   FiTruck,
@@ -29,7 +30,7 @@ export default function Login({
     setRole(initialRole);
   }, [initialRole]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => { // Make function async
     e.preventDefault();
 
     if (!email || !password) {
@@ -42,6 +43,7 @@ export default function Login({
       return;
     }
 
+    // This admin email check should probably be handled by backend, but keep for now.
     if (role === "admin" && !email.endsWith("@smartmove.com")) {
       toast.error(
         "❌ Admin access requires a SmartMove admin email (@smartmove.com)",
@@ -51,35 +53,33 @@ export default function Login({
 
     setLoading(true);
 
-    setTimeout(() => {
-      if (email === "wrong@user.com") {
-        toast.error("❌ Invalid email or password. Please try again.");
-        setLoading(false);
-        return;
-      }
+    try {
+      const response = await apiPost("/auth/login", { email, password });
+      
+      const { token, user } = response.data; // Assuming backend returns { token, user: {id, email, role} }
+      
+      localStorage.setItem("auth_token", token); // Store token for api.js
+      signIn(user, token); // Update AuthContext with user data and token
 
-      const user = {
-        name: email.split("@")[0],
-        email,
-        role,
-      };
-
-      signIn(user);
       try {
-        localStorage.setItem("userRole", role);
+        localStorage.setItem("userRole", user.role); // Store role locally for App.jsx navigation
       } catch (e) {}
 
-      const roleDisplay = role.charAt(0).toUpperCase() + role.slice(1);
+      const roleDisplay = user.role.charAt(0).toUpperCase() + user.role.slice(1);
       toast.success(
-        `✅ Welcome ${user.name}! Logged in as ${roleDisplay}. Redirecting...`,
+        `✅ Welcome ${user.name || user.email}! Logged in as ${roleDisplay}. Redirecting...`,
         {
           autoClose: 2000,
         },
       );
-
+      if (onSuccess) onSuccess(user); // Notify parent component (App.jsx)
+    } catch (error) {
+      const errorMessage = error.message || "Login failed. Please try again.";
+      toast.error(`❌ ${errorMessage}`);
+      console.error("Login API error:", error);
+    } finally {
       setLoading(false);
-      if (onSuccess) onSuccess(user);
-    }, 900);
+    }
   };
 
   const demoLogin = (demoRole) => {
@@ -116,7 +116,7 @@ export default function Login({
     setTimeout(() => {
       const demoUser = demoProfiles[demoRole];
 
-      signIn(demoUser);
+      signIn(demoUser, "DEMO_TOKEN");
 
       const roleDisplay = demoRole.charAt(0).toUpperCase() + demoRole.slice(1);
       const roleMessages = {

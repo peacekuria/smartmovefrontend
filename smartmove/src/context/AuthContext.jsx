@@ -15,9 +15,10 @@ export function AuthProvider({ children }) {
     setUser(null)
   }
 
-  function signIn(data) {
-    localStorage.setItem('sm_user', JSON.stringify(data))
-    setUser(data)
+  function signIn(user, token) {
+    localStorage.setItem('sm_user', JSON.stringify(user));
+    localStorage.setItem('auth_token', token); // Store token for API calls
+    setUser(user);
   }
 
   return (

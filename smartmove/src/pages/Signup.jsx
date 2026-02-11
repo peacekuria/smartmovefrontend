@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
+import { apiPost } from "../utils/api"; // Import apiPost
 import { FiArrowLeft, FiUser, FiMail, FiLock, FiCheck } from "react-icons/fi";
 import "react-toastify/dist/ReactToastify.css";
 import "./Signup.css";
@@ -15,7 +16,7 @@ export default function Signup({ onSuccess, onNavigate }) {
   const [agree, setAgree] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) { // Make function async
     e.preventDefault();
 
     if (!firstName || !lastName) {
@@ -49,20 +50,32 @@ export default function Signup({ onSuccess, onNavigate }) {
     }
 
     setLoading(true);
-    const user = {
-      name: `${firstName} ${lastName}`.trim(),
-      email,
-      role: "client",
-    };
-    setTimeout(() => {
-      signIn(user);
-      setLoading(false);
+
+    try {
+      const response = await apiPost("/auth/register", {
+        email,
+        password,
+        first_name: firstName,
+        last_name: lastName,
+        role: "client", // Default to client role
+      });
+
+      // Assuming backend returns { user: {id, email, role} } on successful registration
       toast.success(
-        `✅ Welcome ${firstName}! Account created successfully. Redirecting...`,
+        `✅ Welcome ${firstName}! Account created successfully. Please log in.`,
         { autoClose: 2000 },
       );
-      if (onSuccess) onSuccess(user);
-    }, 900);
+      if (onSuccess) onSuccess(); // Notify parent component (App.jsx) - no user object passed now
+      // Redirect to login page after successful registration
+      onNavigate('login');
+
+    } catch (error) {
+      const errorMessage = error.message || "Registration failed. Please try again.";
+      toast.error(`❌ ${errorMessage}`);
+      console.error("Registration API error:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
