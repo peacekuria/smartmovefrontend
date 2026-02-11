@@ -165,7 +165,7 @@ export default function Signup({ onSuccess, onNavigate }) {
               <input
                 id="confirmPassword"
                 type="password"
-                placeholder="••••••••"
+                placeholder="*******"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="form-input"
