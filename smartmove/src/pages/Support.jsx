@@ -7,7 +7,7 @@ import {
   FiMessageCircle,
   FiArrowLeft,
   FiSend,
-  FiHelpCircle, // fixed icon
+  FiHelpCircle,
   FiX,
 } from "react-icons/fi";
 import { ToastContainer, toast } from "react-toastify";
