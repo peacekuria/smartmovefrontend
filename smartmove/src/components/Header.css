@@ -7,6 +7,66 @@
   z-index: 120;
 }
 
+/* Logo Container - styled as a button */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.logo-container:hover {
+  background: rgba(79, 70, 229, 0.08);
+  border-color: rgba(79, 70, 229, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+}
+
+.logo-container:active {
+  transform: translateY(0);
+  background: rgba(79, 70, 229, 0.12);
+}
+
+.logo-icon {
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+  transition: all 0.2s ease;
+}
+
+.logo-container:hover .logo-icon {
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+  transform: scale(1.05);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.logo-highlight {
+  color: #4f46e5;
+  transition: all 0.2s ease;
+}
+
+.logo-container:hover .logo-highlight {
+  color: #4338ca;
+}
+
+.logo-tagline {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 3px;
+  transition: color 0.2s ease;
+}
+
+.logo-container:hover .logo-tagline {
+  color: #4f46e5;
+}
+
 .header-inner {
   max-width: 1200px;
   margin: 0 auto;

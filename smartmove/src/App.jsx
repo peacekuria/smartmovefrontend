@@ -26,7 +26,6 @@ import AdminDemo from "./pages/AdminDemo";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
-import AccessDenied from "./components/AccessDenied";
 
 // Import API test utilities for development
 if (import.meta.env.DEV) {
@@ -68,37 +67,16 @@ export default function App() {
 
   const renderPage = () => {
     switch (page) {
-      case "map": {
-        const storedRole = role || localStorage.getItem("userRole");
-        let allow = false;
-        if (storedRole === "mover" || storedRole === "admin") {
-          allow = true;
-        } else if (storedRole === "client") {
-          try {
-            const bookings = JSON.parse(
-              localStorage.getItem("bookingHistory") || "[]",
-            );
-            allow = bookings.some(
-              (b) => b.status === "Completed" || b.status === "completed",
-            );
-          } catch (e) {
-            allow = false;
-          }
-        }
-
-        if (!allow)
-          return (
-            <AccessDenied
-              message={
-                "Tracking is available to movers, admins, or clients with a verified booking."
-              }
-              onNavigate={navigate}
-              required={["mover", "admin", "client (with booking)"]}
-            />
-          );
-
-        return <MapView onNavigate={navigate} />;
-      }
+      case "map":
+        return (
+          <ProtectedRoute
+            userRole={role}
+            allowedRoles={["client", "mover", "admin"]}
+            onNavigate={navigate}
+          >
+            <MapView onNavigate={navigate} />
+          </ProtectedRoute>
+        );
       case "signup":
         return (
           <Signup onSuccess={() => setPage("login")} onNavigate={navigate} />
@@ -185,19 +163,19 @@ export default function App() {
 
       case "movers":
         return (
-          <Movers
+          <ProtectedRoute
+            userRole={role}
+            allowedRoles={["client"]}
             onNavigate={navigate}
-            onBook={(mover) => {
-              setSelectedMover(mover);
-              if (role === "client") {
+          >
+            <Movers
+              onNavigate={navigate}
+              onBook={(mover) => {
+                setSelectedMover(mover);
                 setPage("booking");
-              } else {
-                // prompt login as client if not logged-in client
-                setLoginRole("client");
-                setPage("login");
-              }
-            }}
-          />
+              }}
+            />
+          </ProtectedRoute>
         );
 
       case "booking":
@@ -208,29 +186,6 @@ export default function App() {
             onConfirm={() => setPage("mymoves")}
           />
         );
-
-      case "map": {
-        const storedRole = role || localStorage.getItem("userRole");
-        let allow = false;
-        if (storedRole === "mover" || storedRole === "admin") {
-          allow = true;
-        } else if (storedRole === "client") {
-          try {
-            const bookings = JSON.parse(
-              localStorage.getItem("bookingHistory") || "[]",
-            );
-            allow = bookings.some(
-              (b) => b.status === "Completed" || b.status === "completed",
-            );
-          } catch (e) {
-            allow = false;
-          }
-        }
-
-        if (!allow) return null;
-
-        return <MapView onNavigate={navigate} />;
-      }
 
       case "support":
         return <Support onNavigate={navigate} />;

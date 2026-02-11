@@ -17,19 +17,12 @@ export default function Header({ onNavigate, active }) {
     <header className="header">
       <div className="header-inner">
         <div
-          className="flex items-center gap-3 cursor-pointer"
+          className="logo-container"
           onClick={() => onNavigate("home")}
           role="button"
           aria-label="Go to home"
         >
-          <div
-            className="h-11 w-11 rounded-lg bg-gradient-logo flex items-center justify-center"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div className="h-11 w-11 rounded-lg bg-gradient-logo flex items-center justify-center logo-icon">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-white"
@@ -45,15 +38,11 @@ export default function Header({ onNavigate, active }) {
               />
             </svg>
           </div>
-          <div
-            style={{ display: "flex", flexDirection: "column", lineHeight: 1 }}
-          >
+          <div className="logo-text">
             <span className="font-semibold text-xl text-gray-900">
-              Smart<span style={{ color: "#4f46e5" }}>Move</span>
+              Smart<span className="logo-highlight">Move</span>
             </span>
-            <small style={{ fontSize: 12, color: "#6b7280", marginTop: 2 }}>
-              Reliable moving, simplified
-            </small>
+            <small className="logo-tagline">Reliable moving, simplified</small>
           </div>
         </div>
 
@@ -81,31 +70,42 @@ export default function Header({ onNavigate, active }) {
               Inventory
             </button>
           )}
-          <button
-            type="button"
-            className={`nav-link ${active === "mymoves" ? "text-indigo-600" : ""}`}
-            onClick={() => safeNavigate("mymoves")}
-          >
-            My Moves
-          </button>
-          <button
-            className={`nav-link ${active === "movers" ? "text-indigo-600" : ""}`}
-            onClick={() => safeNavigate("movers")}
-          >
-            Find Movers
-          </button>
-          <button
-            className={`nav-link ${active === "booking" ? "text-indigo-600" : ""}`}
-            onClick={() => safeNavigate("booking")}
-          >
-            Booking
-          </button>
-          <button
-            className={`nav-link ${active === "map" ? "text-indigo-600" : ""}`}
-            onClick={() => safeNavigate("map")}
-          >
-            Track
-          </button>
+          {user && user.role === "client" && (
+            <button
+              type="button"
+              className={`nav-link ${active === "mymoves" ? "text-indigo-600" : ""}`}
+              onClick={() => safeNavigate("mymoves")}
+            >
+              My Moves
+            </button>
+          )}
+          {user && user.role === "client" && (
+            <button
+              className={`nav-link ${active === "movers" ? "text-indigo-600" : ""}`}
+              onClick={() => safeNavigate("movers")}
+            >
+              Find Movers
+            </button>
+          )}
+          {user && user.role === "client" && (
+            <button
+              className={`nav-link ${active === "booking" ? "text-indigo-600" : ""}`}
+              onClick={() => safeNavigate("booking")}
+            >
+              Booking
+            </button>
+          )}
+          {user &&
+            (user.role === "client" ||
+              user.role === "mover" ||
+              user.role === "admin") && (
+              <button
+                className={`nav-link ${active === "map" ? "text-indigo-600" : ""}`}
+                onClick={() => safeNavigate("map")}
+              >
+                Track
+              </button>
+            )}
           <button
             className={`nav-link ${active === "support" ? "text-indigo-600" : ""}`}
             onClick={() => safeNavigate("support")}
