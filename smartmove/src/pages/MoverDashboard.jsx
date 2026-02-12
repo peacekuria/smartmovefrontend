@@ -26,7 +26,8 @@ export default function MoverDashboard({ onNavigate }) {
 
   const getPaymentHistory = () => {
     try {
-      return JSON.parse(localStorage.getItem("bookingHistory") || "[]");
+      const data = JSON.parse(localStorage.getItem("bookingHistory") || "[]");
+      return Array.isArray(data) ? data : [];
     } catch (e) {
       return [];
     }

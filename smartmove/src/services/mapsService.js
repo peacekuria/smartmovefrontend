@@ -62,4 +62,29 @@ export const MapsService = {
       document.head.appendChild(script);
     });
   },
+
+  /**
+   * Update current mover location
+   */
+  async updateLocation(lat, lng) {
+    try {
+      return await apiPost("/movers/location", { lat, lng });
+    } catch (error) {
+      console.error("Failed to update location:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get assigned mover location for a booking
+   */
+  async getMoverLocation(bookingId) {
+    try {
+      const response = await apiGet(`/bookings/${bookingId}/tracker`);
+      return response.data; // tracker_data returned inside 'data' by success()
+    } catch (error) {
+      console.error("Failed to fetch mover location:", error);
+      throw error;
+    }
+  },
 };

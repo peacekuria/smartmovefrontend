@@ -200,8 +200,10 @@
 .btn-signin {
   width: 100%;
   padding: 11px;
+  background-color: #0284c7;
+  /* Solid fallback */
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  color: white;
+  color: #ffffff !important;
   border-radius: 8px;
   border: none;
   font-weight: 700;

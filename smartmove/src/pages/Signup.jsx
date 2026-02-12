@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
 import { apiPost } from "../utils/api"; // Import apiPost
-import { FiArrowLeft, FiUser, FiMail, FiLock, FiCheck } from "react-icons/fi";
+import { FiArrowLeft, FiUser, FiMail, FiLock, FiCheck, FiTruck } from "react-icons/fi";
 import "react-toastify/dist/ReactToastify.css";
 import "./Signup.css";
 
@@ -14,6 +14,7 @@ export default function Signup({ onSuccess, onNavigate }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agree, setAgree] = useState(false);
+  const [role, setRole] = useState("client");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) { // Make function async
@@ -57,7 +58,7 @@ export default function Signup({ onSuccess, onNavigate }) {
         password,
         first_name: firstName,
         last_name: lastName,
-        role: "client", // Default to client role
+        role: role, // Use selected role
       });
 
       // Assuming backend returns { user: {id, email, role} } on successful registration
@@ -65,9 +66,9 @@ export default function Signup({ onSuccess, onNavigate }) {
         `✅ Welcome ${firstName}! Account created successfully. Please log in.`,
         { autoClose: 2000 },
       );
-      if (onSuccess) onSuccess(); // Notify parent component (App.jsx) - no user object passed now
+      if (onSuccess) onSuccess(role); // Pass selected role to App.jsx
       // Redirect to login page after successful registration
-      onNavigate('login');
+      onNavigate('login', { role: role });
 
     } catch (error) {
       const errorMessage = error.message || "Registration failed. Please try again.";
@@ -102,6 +103,24 @@ export default function Signup({ onSuccess, onNavigate }) {
         <div className="signup-intro">
           <h2>Create Your Account</h2>
           <p>Get started with SmartMove today - it takes less than a minute</p>
+        </div>
+
+        {/* ROLE PICKER */}
+        <div className="role-tabs-signup">
+          <button
+            type="button"
+            className={`role-tab ${role === "client" ? "active" : ""}`}
+            onClick={() => setRole("client")}
+          >
+            <FiUser /> Client
+          </button>
+          <button
+            type="button"
+            className={`role-tab ${role === "mover" ? "active" : ""}`}
+            onClick={() => setRole("mover")}
+          >
+            <FiTruck /> Mover
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="signup-form">

@@ -55,15 +55,20 @@ export default function Login({
 
     try {
       const response = await apiPost("/auth/login", { email, password });
-      
+
       const { token, user } = response.data; // Assuming backend returns { token, user: {id, email, role} }
-      
+
+      // Normalize backend role 'customer' to frontend role 'client'
+      if (user.role === 'customer') {
+        user.role = 'client';
+      }
+
       localStorage.setItem("auth_token", token); // Store token for api.js
       signIn(user, token); // Update AuthContext with user data and token
 
       try {
         localStorage.setItem("userRole", user.role); // Store role locally for App.jsx navigation
-      } catch (e) {}
+      } catch (e) { }
 
       const roleDisplay = user.role.charAt(0).toUpperCase() + user.role.slice(1);
       toast.success(

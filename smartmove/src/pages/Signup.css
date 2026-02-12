@@ -98,6 +98,48 @@
   font-size: 14px;
 }
 
+/* ROLE PICKER */
+.role-tabs-signup {
+  display: flex;
+  background: #f3f4f6;
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  gap: 4px;
+}
+
+.role-tabs-signup .role-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.role-tabs-signup .role-tab:hover {
+  color: #1f2937;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.role-tabs-signup .role-tab.active {
+  background: white;
+  color: #0284c7;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.role-tabs-signup .role-tab svg {
+  font-size: 16px;
+}
+
 /* FORM */
 .signup-form {
   display: flex;

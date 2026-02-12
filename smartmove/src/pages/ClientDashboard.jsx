@@ -17,7 +17,8 @@ export default function ClientDashboard({ onNavigate }) {
 
   const getPaymentHistory = () => {
     try {
-      return JSON.parse(localStorage.getItem("bookingHistory") || "[]");
+      const data = JSON.parse(localStorage.getItem("bookingHistory") || "[]");
+      return Array.isArray(data) ? data : [];
     } catch (e) {
       return [];
     }
@@ -25,7 +26,8 @@ export default function ClientDashboard({ onNavigate }) {
 
   const getRatings = () => {
     try {
-      return JSON.parse(localStorage.getItem("clientRatings") || "[]");
+      const data = JSON.parse(localStorage.getItem("clientRatings") || "[]");
+      return Array.isArray(data) ? data : [];
     } catch (e) {
       return [];
     }
@@ -302,11 +304,10 @@ export default function ClientDashboard({ onNavigate }) {
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
-                  className={`star-btn ${
-                    (ratingType === "app" ? appRating : moverRating) >= star
+                  className={`star-btn ${(ratingType === "app" ? appRating : moverRating) >= star
                       ? "star-active"
                       : ""
-                  }`}
+                    }`}
                   onClick={() =>
                     ratingType === "app"
                       ? setAppRating(star)
@@ -394,9 +395,8 @@ export default function ClientDashboard({ onNavigate }) {
                   {[1, 2, 3, 4, 5].map((star) => (
                     <FiStar
                       key={star}
-                      className={`star-icon ${
-                        rating.rating >= star ? "star-filled" : "star-empty"
-                      }`}
+                      className={`star-icon ${rating.rating >= star ? "star-filled" : "star-empty"
+                        }`}
                     />
                   ))}
                 </div>

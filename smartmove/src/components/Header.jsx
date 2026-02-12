@@ -100,13 +100,15 @@ export default function Header({ onNavigate, active }) {
               user.role === "mover" ||
               user.role === "admin") && (
               <button
+                type="button"
                 className={`nav-link ${active === "map" ? "text-indigo-600" : ""}`}
                 onClick={() => safeNavigate("map")}
               >
-                Track
+                Track Move
               </button>
             )}
           <button
+            type="button"
             className={`nav-link ${active === "support" ? "text-indigo-600" : ""}`}
             onClick={() => safeNavigate("support")}
           >
@@ -114,10 +116,11 @@ export default function Header({ onNavigate, active }) {
           </button>
           {user && user.role === "admin" && (
             <button
+              type="button"
               className={`nav-link ${active === "admin" ? "text-indigo-600" : ""}`}
               onClick={() => safeNavigate("admin")}
             >
-              Admin
+              Admin Central
             </button>
           )}
         </nav>

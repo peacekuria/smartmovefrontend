@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { AuthProvider } from "./context/AuthContext";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import Home from "./pages/Home";
@@ -33,16 +33,12 @@ if (import.meta.env.DEV) {
 }
 
 export default function App() {
+  const { user } = useContext(AuthContext);
   const [page, setPage] = useState("home");
-  const [role, setRole] = useState(null);
   const [selectedMover, setSelectedMover] = useState(null);
   const [loginRole, setLoginRole] = useState("client");
 
   const navigate = (nextPage, options = {}) => {
-    // persist last visited page for context-aware navigation
-    try {
-      localStorage.setItem("lastPage", page || "home");
-    } catch (e) {}
     if (options.role) {
       setLoginRole(options.role);
     }
@@ -50,15 +46,11 @@ export default function App() {
   };
 
   const handleLoginSuccess = (user) => {
-    setRole(user.role);
+    const userRole = user.role || "client";
 
-    try {
-      localStorage.setItem("userRole", user.role);
-    } catch (e) {}
-
-    if (user.role === "admin") {
+    if (userRole === "admin") {
       setPage("admin");
-    } else if (user.role === "mover") {
+    } else if (userRole === "mover") {
       setPage("mover-dashboard");
     } else {
       setPage("client-dashboard");
@@ -66,6 +58,7 @@ export default function App() {
   };
 
   const renderPage = () => {
+    const role = user?.role || null;
     switch (page) {
       case "map":
         return (
@@ -79,7 +72,13 @@ export default function App() {
         );
       case "signup":
         return (
-          <Signup onSuccess={() => setPage("login")} onNavigate={navigate} />
+          <Signup
+            onSuccess={(selectedRole) => {
+              setLoginRole(selectedRole || "client");
+              setPage("login");
+            }}
+            onNavigate={navigate}
+          />
         );
 
       case "services":
@@ -196,7 +195,7 @@ export default function App() {
   };
 
   return (
-    <AuthProvider>
+    <>
       <Header onNavigate={navigate} active={page} />
       <main>{renderPage()}</main>
 
@@ -209,6 +208,6 @@ export default function App() {
         draggable
         theme="light"
       />
-    </AuthProvider>
+    </>
   );
 }
